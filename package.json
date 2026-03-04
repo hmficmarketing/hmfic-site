@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "dependencies": {
+    "airtable": "^0.12.2",
+    "resend": "^4.1.2"
+  }
+}

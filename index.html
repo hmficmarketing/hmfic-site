@@ -331,7 +331,7 @@
       <div class="form-wrap">
         <form
           id="applyForm"
-          action="https://formspree.io/f/xykdrzrv"
+          action="/api/submit"
           method="POST"
           class="apply-form"
         >
@@ -353,7 +353,7 @@
           </div>
           <div class="form-group">
             <label for="website">Website or Offer Link</label>
-            <input type="url" id="website" name="website" placeholder="https://website.com" />
+            <input type="text" id="website" name="website" placeholder="https://website.com" />
           </div>
           <div class="form-group">
             <label>Are you currently running ads?</label>
@@ -386,15 +386,18 @@
             </button>
           </div>
 
-          <div id="formSuccess" class="form-success" style="display:none">
-            <div class="success-icon">✓</div>
-            <h3>Application Received!</h3>
-            <p>We'll review your application and get back to you within 24–48 hours if it's a good fit.</p>
-          </div>
-          <div id="formError" class="form-error" style="display:none">
-            <p>Something went wrong. Please try again or email us directly.</p>
-          </div>
         </form>
+        <div id="formSuccess" class="form-success" style="display:none">
+          <div class="success-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="8,17 14,23 24,10" class="check-draw"/></svg>
+          </div>
+          <h3>Application Received</h3>
+          <p class="success-lead">We appreciate you — thanks so much for reaching out. You'll hear back from us within 24–48 hours. We're excited to build your growth plan.</p>
+          <p class="success-note">Check your inbox for a confirmation email. If you don't see it within 5–10 minutes, check your spam folder.</p>
+        </div>
+        <div id="formError" class="form-error" style="display:none">
+          <p>Something went wrong. Please try again or email us directly.</p>
+        </div>
       </div>
     </div>
   </section>

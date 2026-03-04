@@ -77,13 +77,6 @@
       // Honeypot check
       if (form.querySelector('[name="_gotcha"]').value) return;
 
-      // Check for placeholder form ID
-      const action = form.getAttribute('action');
-      if (action.includes('YOUR_FORM_ID')) {
-        alert('Form not yet configured. Please set your Formspree form ID in index.html.');
-        return;
-      }
-
       // Set loading state
       submitBtn.disabled = true;
       if (btnText) btnText.style.display = 'none';
@@ -91,11 +84,11 @@
       if (errorEl) errorEl.style.display = 'none';
 
       try {
-        const data = new FormData(form);
+        const data = Object.fromEntries(new FormData(form));
         const response = await fetch(form.action, {
           method: 'POST',
-          body: data,
-          headers: { Accept: 'application/json' }
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' }
         });
 
         if (response.ok) {
