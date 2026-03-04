@@ -115,6 +115,50 @@
     });
   }
 
+  // --- Stat Scramble (scroll-triggered) ---
+  function scrambleText(el, finalText, duration) {
+    const chars = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%+–×';
+    let frame = 0;
+    const totalFrames = Math.ceil(duration / 40);
+
+    const tick = setInterval(() => {
+      frame++;
+      const progress = frame / totalFrames;
+      const revealCount = Math.floor(progress * finalText.length);
+
+      el.textContent = finalText
+        .split('')
+        .map((ch, i) => {
+          if (i < revealCount) return ch;
+          if (ch === ' ' || ch === '–') return ch;
+          return chars[Math.floor(Math.random() * chars.length)];
+        })
+        .join('');
+
+      if (frame >= totalFrames) {
+        clearInterval(tick);
+        el.textContent = finalText;
+      }
+    }, 40);
+  }
+
+  const statsSection = document.querySelector('.about-stats');
+  if (statsSection && 'IntersectionObserver' in window) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          statsObserver.unobserve(entry.target);
+          entry.target.querySelectorAll('.stat strong').forEach((el, i) => {
+            const finalText = el.textContent;
+            setTimeout(() => scrambleText(el, finalText, 900), i * 200);
+          });
+        }
+      });
+    }, { threshold: 0.6 });
+
+    statsObserver.observe(statsSection);
+  }
+
   // --- Scroll Animation (fade-in sections) ---
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(

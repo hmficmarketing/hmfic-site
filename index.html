@@ -23,9 +23,6 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#testimonials">Results</a></li>
         <li><a href="#apply" class="btn btn-nav">Apply Now</a></li>
       </ul>
     </div>
@@ -35,7 +32,7 @@
   <section class="hero" id="hero">
     <div class="container hero-inner">
       <div class="hero-badge">Facebook · Google · TikTok Ads</div>
-      <h1 class="hero-headline">The #1 Ad System for Scaling Your Brand to <span class="highlight">7 Figures</span></h1>
+      <h1 class="hero-headline"><span class="word">The</span> <span class="word">#1</span> <span class="word">Ad</span> <span class="word">System</span> <span class="word">for</span> <span class="word">Scaling</span> <span class="word">Your</span> <span class="word">Brand</span> <span class="word">to</span> <span class="word highlight">7&nbsp;Figures</span></h1>
       <p class="hero-sub">Done-for-you Facebook, Google & TikTok ad management that delivers 3–5X ROI — without you touching a single campaign.</p>
       <div class="hero-ctas">
         <a href="#apply" class="btn btn-primary btn-lg">Apply to Work With Us</a>
@@ -62,16 +59,12 @@
         <p>HMFIC isn't an agency with junior account managers. When you work with us, you get direct access to proven systems, battle-tested strategies, and real human oversight on every dollar you spend.</p>
         <div class="about-stats">
           <div class="stat">
-            <strong>$M+</strong>
+            <strong>$10M+</strong>
             <span>Ad Spend Managed</span>
           </div>
           <div class="stat">
             <strong>3–5X</strong>
             <span>Average Client ROI</span>
-          </div>
-          <div class="stat">
-            <strong>7-Figure</strong>
-            <span>Brands Scaled</span>
           </div>
         </div>
       </div>
@@ -99,8 +92,7 @@
             <li>Weekly performance reports</li>
           </ul>
         </div>
-        <div class="card card-featured">
-          <div class="card-badge">Most Popular</div>
+        <div class="card">
           <div class="card-icon">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,30 13,18 22,23 37,8"/><polyline points="28,8 37,8 37,17"/></svg>
           </div>
@@ -134,8 +126,10 @@
   <section class="logos section-pad" id="clients">
     <div class="container">
       <p class="logos-label">Trusted by brands you know</p>
-      <div class="logos-grid">
-        <!-- Replace with actual logo images -->
+    </div>
+    <div class="marquee-wrapper">
+      <div class="marquee-track">
+        <!-- Set 1 -->
         <div class="logo-item"><img src="assets/client-logos/help.png" alt="HELP" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>HELP</span>'"></div>
         <div class="logo-item"><img src="assets/client-logos/gym.png" alt="Gym" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>GYM</span>'"></div>
         <div class="logo-item"><img src="assets/client-logos/nci.png" alt="NCI" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>NCI</span>'"></div>
@@ -144,6 +138,15 @@
         <div class="logo-item"><img src="assets/client-logos/weareallsmith.png" alt="We Are All Smith" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>We Are All Smith</span>'"></div>
         <div class="logo-item"><img src="assets/client-logos/m.png" alt="M" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>M</span>'"></div>
         <div class="logo-item"><img src="assets/client-logos/strongher.png" alt="Strongher" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>Strongher</span>'"></div>
+        <!-- Set 2 (duplicate for seamless loop) -->
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/help.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>HELP</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/gym.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>GYM</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/nci.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>NCI</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/curzio.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>Curzio</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/freedym.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>FREEDYM</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/weareallsmith.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>We Are All Smith</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/m.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>M</span>'"></div>
+        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/strongher.png" alt="" onerror="this.parentElement.innerHTML='<span class=\'logo-text-fallback\'>Strongher</span>'"></div>
       </div>
     </div>
   </section>
@@ -271,41 +274,45 @@
   </section>
 
   <!-- WHY WORK WITH ME -->
-  <section class="why section-pad bg-light" id="why">
+  <section class="why section-pad bg-dark" id="why">
     <div class="container">
       <div class="section-header">
         <div class="section-eyebrow">The HMFIC Difference</div>
         <h2>Why Serious Brands Choose Us</h2>
       </div>
       <div class="why-grid">
-        <div class="why-card">
+        <div class="why-card" data-num="01">
           <span class="why-number">01</span>
           <div class="why-icon">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="19" y2="10"/><line x1="19" y1="28" x2="19" y2="34"/><line x1="4" y1="19" x2="10" y2="19"/><line x1="28" y1="19" x2="34" y2="19"/><line x1="8" y1="8" x2="12.5" y2="12.5"/><line x1="25.5" y1="25.5" x2="30" y2="30"/><line x1="30" y1="8" x2="25.5" y2="12.5"/><line x1="12.5" y1="25.5" x2="8" y2="30"/><circle cx="19" cy="19" r="6"/></svg>
+            <!-- Bar chart = Scalability -->
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="33" x2="34" y2="33"/><rect x="5" y="22" width="7" height="11" rx="1"/><rect x="15.5" y="14" width="7" height="19" rx="1"/><rect x="26" y="6" width="7" height="27" rx="1"/></svg>
           </div>
           <h3>Scalability</h3>
           <p>Systems built to scale from $10k/month to $100k/month without breaking. We build for growth from day one.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card" data-num="02">
           <span class="why-number">02</span>
           <div class="why-icon">
+            <!-- Shield + check = Reliability -->
             <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3L4 10v10c0 10 15 17 15 17s15-7 15-17V10L19 3z"/><polyline points="13,19 17,23 26,14"/></svg>
           </div>
           <h3>Reliability</h3>
           <p>Consistent management, proactive communication, and zero surprises. You'll always know what's happening with your spend.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card" data-num="03">
           <span class="why-number">03</span>
           <div class="why-icon">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="19" cy="19" r="15"/><line x1="19" y1="10" x2="19" y2="12"/><line x1="19" y1="26" x2="19" y2="28"/><path d="M14 16a5 5 0 0 1 10 0c0 4-5 4-5 8"/><circle cx="19" cy="27" r="0.5" fill="currentColor"/></svg>
+            <!-- Dollar sign = ROI-Driven -->
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="19" y1="3" x2="19" y2="35"/><path d="M26 9H15.5a6.5 6.5 0 0 0 0 13H22a6.5 6.5 0 0 1 0 13H11"/></svg>
           </div>
           <h3>ROI-Driven</h3>
           <p>We don't optimize for clicks or impressions. Every decision is tied to revenue. Your profit is our performance metric.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card" data-num="04">
           <span class="why-number">04</span>
           <div class="why-icon">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="19" r="5"/><path d="M19 4v6M19 28v6M4 19h6M28 19h6M8.5 8.5l4.2 4.2M25.3 25.3l4.2 4.2M29.5 8.5l-4.2 4.2M12.7 25.3l-4.2 4.2"/></svg>
+            <!-- Circular arrows = Automation -->
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M34 19a15 15 0 1 1-4.4-10.6"/><polyline points="34,4 34,13 25,13"/></svg>
           </div>
           <h3>Automation</h3>
           <p>SMS flows, retargeting sequences, and follow-up automations that work around the clock to maximize every dollar spent.</p>
@@ -318,9 +325,8 @@
   <section class="apply section-pad bg-dark" id="apply">
     <div class="container">
       <div class="section-header section-header-light">
-        <div class="section-eyebrow eyebrow-red">Limited Availability</div>
-        <h2>Apply to Work With HMFIC</h2>
-        <p class="section-sub">Tell us about your business. If it's a good fit, we'll reach out to schedule a call.</p>
+        <div class="apply-tagline-pill">Let's Build a Customer Acquisition Machine That Runs on Autopilot</div>
+        <p class="section-sub" style="margin-top:24px;">Tell us about your business. If it's a good fit, we'll reach out to schedule a call.</p>
       </div>
       <div class="form-wrap">
         <form
@@ -329,45 +335,45 @@
           method="POST"
           class="apply-form"
         >
-          <div class="form-row">
-            <div class="form-group">
-              <label for="firstName">First Name <span class="required">*</span></label>
-              <input type="text" id="firstName" name="firstName" placeholder="John" required />
-            </div>
-            <div class="form-group">
-              <label for="lastName">Last Name <span class="required">*</span></label>
-              <input type="text" id="lastName" name="lastName" placeholder="Smith" required />
-            </div>
+          <div class="form-group">
+            <label for="fullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" name="fullName" placeholder="John Smith" required />
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="email">Email Address <span class="required">*</span></label>
-              <input type="email" id="email" name="email" placeholder="john@yourbrand.com" required />
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number <span class="required">*</span></label>
-              <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required />
+          <div class="form-group">
+            <label for="email">Email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" placeholder="john@yourbrand.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required />
+          </div>
+          <div class="form-group">
+            <label for="business">Business Name</label>
+            <input type="text" id="business" name="businessName" placeholder="Your Brand Inc." />
+          </div>
+          <div class="form-group">
+            <label for="website">Website or Offer Link</label>
+            <input type="url" id="website" name="website" placeholder="https://website.com" />
+          </div>
+          <div class="form-group">
+            <label>Are you currently running ads?</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="runningAds" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="runningAds" value="No" /> No</label>
             </div>
           </div>
           <div class="form-group">
-            <label for="business">Business Name <span class="required">*</span></label>
-            <input type="text" id="business" name="businessName" placeholder="Your Brand Inc." required />
+            <label for="adSpend">Monthly Ad Spend?</label>
+            <input type="text" id="adSpend" name="monthlyAdSpend" placeholder="e.g. $5,000/mo" />
           </div>
           <div class="form-group">
-            <label for="reason">What's your reason for reaching out? <span class="required">*</span></label>
-            <select id="reason" name="reason" required>
-              <option value="" disabled selected>Select one...</option>
-              <option value="facebook-google-ads">Facebook / Google Ads Management</option>
-              <option value="tiktok-ads">TikTok Ads</option>
-              <option value="sms-marketing">SMS Marketing</option>
-              <option value="full-service">Full-Service (Ads + SMS)</option>
-              <option value="strategy-call">Just want a strategy call</option>
-              <option value="other">Other</option>
-            </select>
+            <label for="cpl">Current CPL or CPA (if known)?</label>
+            <input type="text" id="cpl" name="cplCpa" placeholder="e.g. $12 CPL" />
           </div>
           <div class="form-group">
-            <label for="help">How can we help you? <span class="required">*</span></label>
-            <textarea id="help" name="help" rows="5" placeholder="Tell us about your business, current monthly ad spend, and what you're trying to achieve..." required></textarea>
+            <label for="stuck">Where are you feeling stuck, or what prompted you to reach out today? <span class="required">*</span></label>
+            <textarea id="stuck" name="stuck" rows="5" required></textarea>
+            <span class="field-hint">(Be real – the more we understand, the better we can help.)</span>
           </div>
 
           <!-- Honeypot -->
