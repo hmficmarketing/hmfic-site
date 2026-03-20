@@ -38,7 +38,7 @@ Reposition the site copy to reflect the real business: ads-first, system-powered
 
 **CTAs:** Keep both.
 - Primary: "Apply to Work With Us"
-- Secondary: "See How It Works" (scrolls to Services/system section)
+- Secondary: "See How It Works" (update anchor from `#about` to `#services`)
 
 **Proof bar:** 3 items. Keep "Proven 3-5X ROI." Replace "Hands-Free Management" and "Limited Spots Available" — one should communicate the AI-as-superpower philosophy (territory: "Built for Where Marketing Is Going" or "AI as a Superpower, Not a Shortcut"), one should keep the scarcity/exclusivity angle.
 
@@ -62,6 +62,8 @@ Reposition the site copy to reflect the real business: ads-first, system-powered
 
 **Change level:** Major rewrite — new cards replacing the current 3
 
+**Section header/eyebrow:** Update from "What We Do" / "Full-Stack Ad Management That Scales" to reflect the system framing. Territory: "How It Works" / "The System Behind the Results."
+
 **Card 1: Intelligence**
 The GCF at work. Before any ad runs or content is created, we map your business, your audience, and your messaging. We figure out what your people respond to, what's holding them back, what moves them to act — at every level. This isn't a questionnaire. It's a client intelligence framework that everything else is built on.
 
@@ -71,7 +73,9 @@ The intelligence feeds a content system — ads, scripts, social content, email 
 **Card 3: Acceleration (Paid Ads Engine)**
 The core — Facebook, Google, TikTok ads built on real intelligence, not guesswork. Every campaign is informed by the same system that drives the content. Ads and content are the same conversation. That's how you compound results instead of just spending money.
 
-**Note:** The ordering (Intelligence → Authority → Acceleration) tells a story of how the system works, but copy within each card must NOT imply "content first, ads second." Card 3 makes clear ads are the engine. Content amplifies.
+**Note:** The ordering (Intelligence → Authority → Acceleration) tells a story of how the system works, but copy within each card must NOT imply "content first, ads second." Card 3 should feel like the main event, not the final step. Ads are the engine. Content amplifies.
+
+**Card format:** Current cards use `<ul>` bullet lists. New cards are more narrative. Decide during implementation whether to keep bullets for scanability or go paragraph-based. Either works structurally.
 
 **SMS:** Folded into Cards 2 and 3 as a tactic within the system. No standalone card.
 
@@ -138,6 +142,17 @@ Marketing is moving fast. AI, content, ads, platforms — keeping up is a full-t
 ### 9. Footer
 
 **Change level:** Fix copyright from 2025 to 2026.
+
+## Also In Scope (Minor)
+
+- **Page `<title>` and `<meta name="description">`:** Update to reflect the new positioning. Current title is "HMFIC -- Facebook, Google & TikTok Ad System for 7-Figure Scaling." Rewrite to include the GCF name and system angle.
+- **Nav:** Currently only has "Apply Now." Consider adding a link to `#services` (the system section). Keep nav minimal.
+- **"See How It Works" anchor:** Change from `#about` to `#services`.
+- **Dash audit:** The no-dashes directive applies to ALL copy on the page, including elements that aren't getting a full rewrite (testimonial quotes, success message, proof bar, etc.). Audit everything.
+
+## Known Tension
+
+- Jason Phillips' testimonial specifically calls out SMS marketing ("The SMS marketing strategy alone paid for everything"). SMS is being de-emphasized as a standalone service. The testimonial stays (it's a real quote and still valid), but be aware of the slight mismatch with the new positioning.
 
 ## What This Spec Does NOT Cover
 
