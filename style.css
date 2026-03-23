@@ -396,7 +396,7 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
   align-items: center;
   gap: 10px;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   color: rgba(255,255,255,0.4);
   padding-right: 36px;
   letter-spacing: 0.12em;
@@ -544,6 +544,7 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
 
 .card h3 { margin-bottom: 14px; }
 .card p { color: var(--gray); font-size: 0.93rem; margin-bottom: 24px; line-height: 1.7; font-weight: 300; }
+.card .card-lead { color: var(--black); font-size: 1rem; font-weight: 500; line-height: 1.6; margin-bottom: 18px; }
 .card ul { padding: 0; }
 .card ul li {
   font-size: 0.87rem;
@@ -708,6 +709,15 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
   overflow: hidden;
   aspect-ratio: 16/9;
   position: relative;
+}
+
+.video-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .video-placeholder {
