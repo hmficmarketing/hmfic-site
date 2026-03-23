@@ -92,6 +92,8 @@
         });
 
         if (response.ok) {
+          // Fire Meta Pixel Lead event
+          if (typeof fbq === 'function') fbq('track', 'Lead');
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
           // Scroll success into view
