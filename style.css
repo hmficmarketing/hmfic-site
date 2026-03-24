@@ -568,8 +568,7 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
 
 /* --- Client Logos --- */
 .logos {
-  border-top: 1px solid var(--gray-light);
-  border-bottom: 1px solid var(--gray-light);
+  background: var(--dark);
   padding: 56px 0;
 }
 
@@ -580,7 +579,7 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gray);
+  color: rgba(255,255,255,0.4);
   margin-bottom: 40px;
 }
 
@@ -612,14 +611,19 @@ h3 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 40px;
+  padding: 12px 44px;
   flex-shrink: 0;
-  filter: grayscale(1);
-  opacity: 0.38;
-  transition: filter var(--transition), opacity var(--transition);
+  opacity: 0.7;
+  transition: opacity var(--transition);
 }
-.logo-item:hover { filter: grayscale(0); opacity: 1; }
-.logo-item img { max-height: 36px; width: auto; }
+.logo-item:hover { opacity: 1; }
+.logo-item img {
+  height: 48px;
+  max-width: 180px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
 
 .logo-text-fallback {
   font-family: var(--font-display);
