@@ -23,6 +23,26 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
+  // Turnstile verification — reject bots
+  const turnstileToken = body['cf-turnstile-response'];
+  if (!turnstileToken) {
+    return res.status(422).json({ error: 'Spam check failed. Please refresh and try again.' });
+  }
+
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+  if (turnstileSecret) {
+    const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(turnstileToken)}`,
+    });
+    const turnstileData = await turnstileRes.json();
+    if (!turnstileData.success) {
+      console.error('Turnstile rejection:', turnstileData);
+      return res.status(422).json({ error: 'Spam check failed. Please refresh and try again.' });
+    }
+  }
+
   // Required field validation
   if (!body.fullName || !body.email || !body.phone || !body.stuck) {
     return res.status(422).json({ error: 'Missing required fields' });
