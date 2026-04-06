@@ -1,12 +1,10 @@
 const Airtable = require('airtable');
 const { Resend } = require('resend');
 
-const FORMSPREE_URL = 'https://formspree.io/f/xykdrzrv';
-
 module.exports = async function handler(req, res) {
   // CORS preflight
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'https://hmficmarketing.com');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     return res.status(204).end();
@@ -50,37 +48,27 @@ module.exports = async function handler(req, res) {
 
   const submittedAt = new Date().toISOString();
 
-  // --- Fan out to all three services in parallel ---
-  const [formspreeResult, airtableResult, resendResult] = await Promise.allSettled([
-    // 1. Formspree — your notification email (PRIMARY)
-    fetch(FORMSPREE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-    }).then(r => {
-      if (!r.ok) throw new Error(`Formspree ${r.status}`);
-      return r.json();
-    }),
-
-    // 2. Airtable — lead record (secondary)
+  // --- Fan out to all services in parallel ---
+  const [airtableResult, autoReplyResult, notifyResult] = await Promise.allSettled([
+    // 1. Airtable — lead record
     createAirtableRecord(body, submittedAt),
 
-    // 3. Resend — auto-reply to applicant (secondary)
+    // 2. Resend — auto-reply to applicant
     sendAutoReply(body),
+
+    // 3. Resend — notify Matt directly
+    sendLeadNotification(body, submittedAt),
   ]);
 
-  // Log secondary failures (non-blocking)
+  // Log failures (non-blocking — lead is already in Airtable)
   if (airtableResult.status === 'rejected') {
     console.error('Airtable error:', airtableResult.reason);
   }
-  if (resendResult.status === 'rejected') {
-    console.error('Resend error:', resendResult.reason);
+  if (autoReplyResult.status === 'rejected') {
+    console.error('Resend auto-reply error:', autoReplyResult.reason);
   }
-
-  // Only Formspree failure blocks the response
-  if (formspreeResult.status === 'rejected') {
-    console.error('Formspree error:', formspreeResult.reason);
-    return res.status(502).json({ error: 'Submission failed. Please try again.' });
+  if (notifyResult.status === 'rejected') {
+    console.error('Resend notification error:', notifyResult.reason);
   }
 
   return res.status(200).json({ ok: true });
@@ -128,6 +116,62 @@ async function sendAutoReply(body) {
     subject: `${firstName}, we got your application`,
     html: buildAutoReplyHtml(firstName),
   });
+}
+
+// --- Resend — notify Matt ---
+async function sendLeadNotification(body, submittedAt) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('Resend not configured');
+  }
+
+  const resend = new Resend(apiKey);
+
+  return resend.emails.send({
+    from: 'HMFIC Site <matt@hmficmarketing.com>',
+    to: 'matt@hmficmarketing.com',
+    subject: `New Lead: ${body.fullName}`,
+    html: buildNotificationHtml(body, submittedAt),
+  });
+}
+
+function buildNotificationHtml(body, submittedAt) {
+  const fields = [
+    ['Name', body.fullName],
+    ['Email', body.email],
+    ['Phone', body.phone],
+    ['Business', body.businessName || '—'],
+    ['Website', body.website || '—'],
+    ['Running Ads', body.runningAds || '—'],
+    ['Monthly Ad Spend', body.monthlyAdSpend || '—'],
+    ['CPL / CPA', body.cplCpa || '—'],
+    ['What They\'re Stuck On', body.stuck],
+    ['Submitted', new Date(submittedAt).toLocaleString('en-US', { timeZone: 'America/Chicago' })],
+  ];
+
+  const rows = fields.map(([label, value]) =>
+    `<tr><td style="padding:8px 12px;font-weight:600;color:#0a0a0a;border-bottom:1px solid #eee;white-space:nowrap;vertical-align:top;">${label}</td><td style="padding:8px 12px;color:#333;border-bottom:1px solid #eee;">${value}</td></tr>`
+  ).join('');
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;max-width:600px;">
+        <tr><td style="background:#0a0a0a;padding:24px 40px;text-align:center;">
+          <span style="font-size:24px;font-weight:800;color:#ffffff;letter-spacing:2px;">NEW LEAD</span>
+        </td></tr>
+        <tr><td style="background:#e63946;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td style="padding:24px 20px;">
+          <table width="100%" cellpadding="0" cellspacing="0">${rows}</table>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 }
 
 function buildAutoReplyHtml(firstName) {
