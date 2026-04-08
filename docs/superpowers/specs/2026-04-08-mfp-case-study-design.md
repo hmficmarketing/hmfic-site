@@ -134,9 +134,25 @@ Light SEO pass, not the primary driver. Target terms: *shopify case study*, *sho
 - Migrating other pages of `hmfic-site` to Astro beyond what's needed to host this case study cleanly
 - Building case studies for other clients in this phase (templating supports it, but only MFP ships now)
 
-## Open Questions
+## Resolved Questions (as of 2026-04-08)
 
-1. Is the existing `mfp-shopify` Shopify theme far enough along to screenshot for the Build chapter, or do we need to finish specific pages first?
-2. Is there a pre-rebuild "before" state we can still capture (live URL, Wayback Machine, old screenshots)? If not, the before/after slider may need to become a "decision log" instead.
-3. Do we have client (MFP) approval to publish the Intelligence Brief / Brand Voice Profile / Avatar Map as styled snippets, even redacted? If no, Chapter 5 needs a different visual treatment.
-4. Does `hmfic-site` have active production traffic or any SEO equity we need to preserve during the Astro migration?
+1. **Screenshots:** MFP Shopify rebuild is fully built and ready to capture. One new product page launches Sunday 2026-04-12 (new paddle release) — worth capturing post-launch to include as the most recent build artifact.
+2. **Before state:** The pre-rebuild theme is still accessible inside the MFP Shopify admin. We can capture the "before" screens for the before/after slider in Chapter 4.
+3. **Intelligence Layer publishing:** Option B — **styled snippet treatment** (composed visual excerpts, not raw file dumps). Matt built the full intelligence package for MFP as a gesture with an explicit understanding that MFP would be used as a case study, so the verbal green light already exists. Before publishing, Matt will send MFP a courtesy message with a preview of the page so it's on the record.
+4. **SEO equity:** None to protect. `hmfic-site` is currently a single-page site with no meaningful SEO footprint. Astro migration is a clean slate.
+
+## Intelligence Layer — Chapter 5 Rendering Detail
+
+Locked via in-context mockup. The chapter renders as:
+
+- Chapter header: monospace "Chapter" eyebrow, giant `05/` numeral with orange slash, right-aligned "Now Reading: The Intelligence Layer" metadata block
+- Chapter title (serif, 42px): *"Before any content gets made, here's what we already know."*
+- Two-paragraph narrative intro establishing why the intelligence layer exists and how everything downstream descends from it
+- Three styled snippet cards in a horizontal grid (stacks on mobile):
+  - **Intelligence Brief** card — 4 key/value rows drawn from `Intelligence Brief.md` (e.g. Founded, Origin, Market, Edge). Orange tag label, excerpt label, serif header, monospace footer.
+  - **Voice Profile** card — 4 rows drawn from `Brand Voice Profile.md` (e.g. Tone, Pacing, Avoid, Use).
+  - **Avatar Map** card — 4 rows drawn from `Avatar Map.md` (e.g. Age, Pain, Belief, Trigger).
+- Pull quote with orange left rule: the emotional beat that bridges to Chapter 6
+- Transition bar (hard black 2px rule) pointing to Chapter 6 / The Content Engine
+
+Each card is a *design object* built from real MFP content — not a screenshot of a file. Copy is lifted from the actual Vault docs and restructured into key/value pairs. This is client-safe and simultaneously more impressive than publishing the raw documents, because it reads as intentional design.
