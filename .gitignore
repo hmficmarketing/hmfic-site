@@ -5,3 +5,15 @@ Thumbs.db
 .env
 .env.*
 .superpowers/
+
+# Node
+node_modules/
+
+# Astro
+dist/
+.astro/
+.vercel/
+
+# Playwright
+test-results/
+playwright-report/
