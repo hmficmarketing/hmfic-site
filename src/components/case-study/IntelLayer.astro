@@ -1,4 +1,49 @@
 ---
-const props = Astro.props;
+import Chapter from './Chapter.astro';
+import IntelSnippet from './IntelSnippet.astro';
+import PullQuote from './PullQuote.astro';
+import Transition from './Transition.astro';
+
+interface Props {
+  chapterNumber: string;
+  chapterName: string;
+  title: string;
+  paragraphs: string[];
+  snippets: Array<{
+    tag: string;
+    excerptLabel: string;
+    heading: string;
+    rows: Array<{ key: string; value: string }>;
+    footerLeft: string;
+    footerRight: string;
+  }>;
+  pullQuote: { body: string; attribution: string };
+}
+const { chapterNumber, chapterName, title, paragraphs, snippets, pullQuote } = Astro.props;
 ---
-<section data-component="IntelLayer">{JSON.stringify(props).slice(0, 200)}</section>
+<section class="chapter">
+  <div class="container">
+    <Chapter number={chapterNumber} name={chapterName} title={title} />
+    <div class="prose narrow">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="snippets">
+      {snippets.map((s) => <IntelSnippet {...s} />)}
+    </div>
+    <PullQuote body={pullQuote.body} attribution={pullQuote.attribution} />
+    <Transition nextNumber="06" nextName="The Content Engine" />
+  </div>
+</section>
+<style>
+  .chapter { padding: var(--space-7) 0 var(--space-8); }
+  .prose p { font-size: var(--fs-body); line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--space-4); }
+  .snippets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: var(--space-7) 0 var(--space-6);
+  }
+  @media (max-width: 900px) {
+    .snippets { grid-template-columns: 1fr; }
+  }
+</style>
