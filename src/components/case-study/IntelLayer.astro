@@ -38,12 +38,10 @@ const { chapterNumber, chapterName, title, paragraphs, snippets, pullQuote } = A
   .chapter { padding: var(--space-7) 0 var(--space-8); }
   .prose p { font-size: var(--fs-body); line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--space-4); }
   .snippets {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
     margin: var(--space-7) 0 var(--space-6);
-  }
-  @media (max-width: 900px) {
-    .snippets { grid-template-columns: 1fr; }
+    max-width: 780px;
   }
 </style>

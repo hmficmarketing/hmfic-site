@@ -17,6 +17,7 @@ const chapterSchema = z.discriminatedUnion('type', [
     title: z.string(),
     paragraphs: z.array(z.string()),
     callout: z.object({ label: z.string(), body: z.string() }).optional(),
+    next: z.object({ number: z.string(), name: z.string() }).optional(),
   }),
   z.object({
     type: z.literal('build'),

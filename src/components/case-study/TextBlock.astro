@@ -1,6 +1,7 @@
 ---
 import Chapter from './Chapter.astro';
 import Callout from './Callout.astro';
+import Transition from './Transition.astro';
 
 interface Props {
   chapterNumber: string;
@@ -8,8 +9,9 @@ interface Props {
   title: string;
   paragraphs: string[];
   callout?: { label: string; body: string };
+  next?: { number: string; name: string };
 }
-const { chapterNumber, chapterName, title, paragraphs, callout } = Astro.props;
+const { chapterNumber, chapterName, title, paragraphs, callout, next } = Astro.props;
 ---
 <section class="chapter">
   <div class="container">
@@ -18,6 +20,7 @@ const { chapterNumber, chapterName, title, paragraphs, callout } = Astro.props;
       {paragraphs.map((p) => <p>{p}</p>)}
     </div>
     {callout && <Callout label={callout.label} body={callout.body} />}
+    {next && <Transition nextNumber={next.number} nextName={next.name} />}
   </div>
 </section>
 <style>
