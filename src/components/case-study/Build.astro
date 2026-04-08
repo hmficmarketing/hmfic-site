@@ -1,4 +1,31 @@
 ---
-const props = Astro.props;
+import Chapter from './Chapter.astro';
+import BeforeAfter from './BeforeAfter.astro';
+import ScreenshotGrid from './ScreenshotGrid.astro';
+import Transition from './Transition.astro';
+
+interface Props {
+  chapterNumber: string;
+  chapterName: string;
+  title: string;
+  paragraphs: string[];
+  beforeAfter?: { before: string; after: string; beforeAlt: string; afterAlt: string };
+  screenshots: Array<{ src: string; alt: string; caption?: string }>;
+}
+const { chapterNumber, chapterName, title, paragraphs, beforeAfter, screenshots } = Astro.props;
 ---
-<section data-component="Build">{JSON.stringify(props).slice(0, 200)}</section>
+<section class="chapter">
+  <div class="container">
+    <Chapter number={chapterNumber} name={chapterName} title={title} />
+    <div class="prose narrow">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    {beforeAfter && <BeforeAfter {...beforeAfter} />}
+    {screenshots.length > 0 && <ScreenshotGrid screenshots={screenshots} />}
+    <Transition nextNumber="05" nextName="The Intelligence Layer" />
+  </div>
+</section>
+<style>
+  .chapter { padding: var(--space-7) 0 var(--space-8); }
+  .prose p { font-size: var(--fs-body); line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--space-4); }
+</style>

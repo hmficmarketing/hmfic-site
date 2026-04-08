@@ -1,4 +1,31 @@
 ---
-const props = Astro.props;
+interface Props {
+  screenshots: Array<{ src: string; alt: string; caption?: string }>;
+}
+const { screenshots } = Astro.props;
 ---
-<section data-component="ScreenshotGrid">{JSON.stringify(props).slice(0, 200)}</section>
+<div class="grid">
+  {screenshots.map((s) => (
+    <figure>
+      <img src={s.src} alt={s.alt} loading="lazy" />
+      {s.caption && <figcaption class="mono">{s.caption}</figcaption>}
+    </figure>
+  ))}
+</div>
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    margin: var(--space-6) 0;
+  }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  figure img {
+    border: 1px solid var(--paper-edge);
+    box-shadow: 0 10px 24px -14px rgba(0,0,0,.15);
+    transition: transform .2s;
+  }
+  figure img:hover { transform: translateY(-2px); }
+  figcaption { margin-top: 8px; color: var(--ink-4); }
+</style>
