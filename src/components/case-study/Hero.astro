@@ -1,4 +1,89 @@
 ---
-const props = Astro.props;
+interface Props {
+  eyebrow: string;
+  headline: string;
+  headlineAccent?: string;
+  dek: string;
+  cta: { label: string; href: string };
+  skipAnchor: string;
+}
+const { eyebrow, headline, headlineAccent, dek, cta, skipAnchor } = Astro.props;
 ---
-<section data-component="Hero">{JSON.stringify(props).slice(0, 200)}</section>
+<section class="hero" id="chapter-1">
+  <div class="container">
+    <div class="topbar">
+      <span class="mono">{eyebrow}</span>
+      <span class="mono num">№ 001</span>
+    </div>
+    <h1 class="headline">
+      {headline}{headlineAccent && <> <span class="underline">{headlineAccent}</span></>}
+    </h1>
+    <p class="dek narrow">{dek}</p>
+    <div class="actions">
+      <a class="cta-primary" href={cta.href}>{cta.label}</a>
+      <a class="cta-skip" href={skipAnchor}>Skip to the work ↓</a>
+    </div>
+    <div class="hero-footer">
+      <span class="mono">Filed Apr 2026 · HMFIC Marketing</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding: var(--space-8) 0 var(--space-7);
+    position: relative;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: var(--space-8);
+  }
+  .headline {
+    font-size: var(--fs-hero);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+    max-width: 14ch;
+    margin: 0 0 var(--space-6);
+  }
+  .headline .underline {
+    display: inline-block;
+    border-bottom: 4px solid var(--accent);
+    padding-bottom: 4px;
+  }
+  .dek {
+    font-size: var(--fs-dek);
+    color: var(--ink-3);
+    line-height: 1.55;
+    margin: 0 0 var(--space-7);
+  }
+  .actions { display: flex; gap: var(--space-5); align-items: center; flex-wrap: wrap; }
+  .cta-primary {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 22px;
+    text-decoration: none;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 2px;
+    transition: transform .15s;
+  }
+  .cta-primary:hover { transform: translateY(-1px); }
+  .cta-skip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    text-decoration: none;
+  }
+  .cta-skip:hover { color: var(--accent); }
+  .hero-footer { position: absolute; left: 0; right: 0; bottom: var(--space-6); padding: 0 var(--space-6); text-align: right; color: var(--ink-4); }
+</style>
