@@ -1,3 +1,5 @@
+@import './tokens.css';
+
 @font-face {
   font-family: 'Charter';
   src: url('/fonts/source-serif-regular.woff2') format('woff2');
@@ -26,8 +28,6 @@
   font-style: normal;
   font-display: swap;
 }
-
-@import './tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
