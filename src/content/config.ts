@@ -79,7 +79,6 @@ const caseStudies = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
     client: z.string(),
     status: z.enum(['live', 'in-progress', 'draft']),
     eyebrow: z.string(),

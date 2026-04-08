@@ -11,7 +11,7 @@ import Offer from '../../components/case-study/Offer.astro';
 export async function getStaticPaths() {
   const studies = await getCollection('caseStudies');
   return studies.map((study) => ({
-    params: { slug: study.data.slug },
+    params: { slug: study.slug },
     props: { study },
   }));
 }
@@ -23,7 +23,7 @@ const { data } = study;
   title={data.title}
   eyebrow={data.eyebrow}
   ogImage={data.ogImage}
-  slug={data.slug}
+  slug={study.slug}
   chapters={data.chapters}
 >
   {data.chapters.map((chapter) => {
