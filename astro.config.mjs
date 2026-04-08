@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel/static';
 
 export default defineConfig({
@@ -10,7 +9,7 @@ export default defineConfig({
     webAnalytics: { enabled: false },
     imageService: true,
   }),
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx()],
   vite: {
     resolve: {
       alias: {
