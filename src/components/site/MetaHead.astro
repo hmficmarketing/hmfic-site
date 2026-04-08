@@ -1,4 +1,33 @@
 ---
-const props = Astro.props;
+interface Props {
+  title: string;
+  eyebrow: string;
+  ogImage: string;
+  slug: string;
+}
+const { title, eyebrow, ogImage, slug } = Astro.props;
+const url = `https://hmficmarketing.com/case-studies/${slug}`;
+const absoluteOg = ogImage.startsWith('http') ? ogImage : `https://hmficmarketing.com${ogImage}`;
+const description = `${eyebrow} — ${title}. A premium case study from HMFIC Marketing.`;
 ---
-<title>Case Study</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title} — HMFIC Marketing</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={url} />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={url} />
+<meta property="og:image" content={absoluteOg} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="HMFIC Marketing" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteOg} />
+
+<link rel="icon" href="/favicon.ico" />

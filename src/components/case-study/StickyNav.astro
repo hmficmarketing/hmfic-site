@@ -1,4 +1,76 @@
 ---
-const props = Astro.props;
+interface Props {
+  chapters: Array<{ num: string; name: string; anchor: string }>;
+}
+const { chapters } = Astro.props;
 ---
-<section data-component="StickyNav">{JSON.stringify(props).slice(0, 200)}</section>
+<nav class="sticky-nav" data-sticky-nav>
+  <div class="sticky-nav-inner">
+    <div class="brand mono">HMFIC / Build Log</div>
+    <ol class="chapters">
+      {chapters.map((c) => (
+        <li>
+          <a href={c.anchor} data-anchor={c.anchor}>
+            <span class="n">{c.num.replace('/', '')}</span>
+            <span class="name">{c.name}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <a class="cta mono" href="#chapter-8">Book a call →</a>
+  </div>
+</nav>
+<style>
+  .sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    border-bottom: 2px solid var(--ink);
+    backdrop-filter: saturate(1.2);
+  }
+  .sticky-nav-inner {
+    max-width: var(--col-full);
+    margin: 0 auto;
+    padding: 14px var(--space-6);
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+  .brand { color: var(--ink); white-space: nowrap; }
+  .chapters {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-5);
+    flex: 1;
+    overflow-x: auto;
+  }
+  .chapters li { white-space: nowrap; }
+  .chapters a {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .chapters a[aria-current="true"] { color: var(--accent); }
+  .chapters a:hover { color: var(--ink); }
+  .cta {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 14px;
+    text-decoration: none;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  @media (max-width: 800px) {
+    .brand, .chapters li .name { display: none; }
+  }
+</style>
