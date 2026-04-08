@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Hero from '../../components/case-study/Hero.astro';
+import TextBlock from '../../components/case-study/TextBlock.astro';
+import Build from '../../components/case-study/Build.astro';
+import IntelLayer from '../../components/case-study/IntelLayer.astro';
+import Engine from '../../components/case-study/Engine.astro';
+import Offer from '../../components/case-study/Offer.astro';
+
+export async function getStaticPaths() {
+  const studies = await getCollection('caseStudies');
+  return studies.map((study) => ({
+    params: { slug: study.data.slug },
+    props: { study },
+  }));
+}
+
+const { study } = Astro.props;
+const { data } = study;
+---
+<CaseStudyLayout
+  title={data.title}
+  eyebrow={data.eyebrow}
+  ogImage={data.ogImage}
+  slug={data.slug}
+  chapters={data.chapters}
+>
+  {data.chapters.map((chapter) => {
+    if (chapter.type === 'hero') return <Hero {...chapter} />;
+    if (chapter.type === 'text') return <TextBlock {...chapter} />;
+    if (chapter.type === 'build') return <Build {...chapter} />;
+    if (chapter.type === 'intelligence') return <IntelLayer {...chapter} />;
+    if (chapter.type === 'engine') return <Engine {...chapter} />;
+    if (chapter.type === 'offer') return <Offer {...chapter} />;
+    return null;
+  })}
+</CaseStudyLayout>

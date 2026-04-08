@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+import MetaHead from '../components/site/MetaHead.astro';
+import Footer from '../components/site/Footer.astro';
+import StickyNav from '../components/case-study/StickyNav.astro';
+
+interface Props {
+  title: string;
+  eyebrow: string;
+  ogImage: string;
+  slug: string;
+  chapters: Array<{ type: string; chapterNumber?: string; chapterName?: string }>;
+}
+
+const { title, eyebrow, ogImage, slug, chapters } = Astro.props;
+
+const navChapters = chapters
+  .filter((c) => c.chapterNumber && c.chapterName)
+  .map((c) => ({
+    num: c.chapterNumber!,
+    name: c.chapterName!,
+    anchor: `#chapter-${c.chapterNumber!.replace('/', '')}`,
+  }));
+---
+<html lang="en">
+  <head>
+    <MetaHead title={title} eyebrow={eyebrow} ogImage={ogImage} slug={slug} />
+  </head>
+  <body class="case-study">
+    <StickyNav chapters={navChapters} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <script src="/scripts/stickyNav.js" defer></script>
+    <script src="/scripts/beforeAfter.js" defer></script>
+  </body>
+</html>
