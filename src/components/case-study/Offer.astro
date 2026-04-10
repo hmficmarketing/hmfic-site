@@ -61,6 +61,8 @@ const { chapterNumber, chapterName, title, body } = Astro.props;
       var data = {};
       new FormData(form).forEach(function (v, k) { data[k] = v; });
 
+      var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+
       fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,6 +73,26 @@ const { chapterNumber, chapterName, title, body } = Astro.props;
           return res.json();
         })
         .then(function () {
+          // Fire pixel Lead event (client-side)
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead', {
+              content_name: 'Case Study Contact',
+              content_category: 'mfp',
+            }, { eventID: eventId });
+          }
+          // Fire CAPI Lead event (server-side, non-blocking)
+          fetch('/api/meta-capi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event_name: 'Lead',
+              event_id: eventId,
+              email: data.email,
+              phone: data.phone,
+              source_url: window.location.href,
+            }),
+          }).catch(function () {});
+
           status.textContent = 'Sent. We will be in touch within 24 to 48 hours.';
           status.className = 'form-status success';
           btn.textContent = 'Sent ✓';
