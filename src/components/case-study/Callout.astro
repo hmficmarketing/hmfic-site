@@ -1,0 +1,26 @@
+---
+interface Props { label: string; body: string; }
+const { label, body } = Astro.props;
+---
+<aside class="callout">
+  <div class="label">{label}</div>
+  <div class="body">{body}</div>
+</aside>
+<style>
+  .callout {
+    border-left: 4px solid var(--accent);
+    padding: var(--space-3) 0 var(--space-3) var(--space-5);
+    margin: var(--space-6) 0;
+    max-width: 52ch;
+    font-family: var(--font-sans);
+  }
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .body { font-size: 14px; line-height: 1.5; color: var(--ink); }
+</style>

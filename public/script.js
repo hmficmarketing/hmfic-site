@@ -92,8 +92,26 @@
         });
 
         if (response.ok) {
-          // Fire Meta Pixel Lead event
-          if (typeof fbq === 'function') fbq('track', 'Lead');
+          // Fire Meta Pixel Lead event (client-side)
+          var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead', {
+              content_name: 'Main Intake Form',
+              content_category: 'intake',
+            }, { eventID: eventId });
+          }
+          // Fire CAPI Lead event (server-side, non-blocking)
+          fetch('/api/meta-capi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event_name: 'Lead',
+              event_id: eventId,
+              email: data.email,
+              phone: data.phone,
+              source_url: window.location.href,
+            }),
+          }).catch(function () {});
           form.style.display = 'none';
           if (successEl) successEl.style.display = 'block';
           // Scroll success into view

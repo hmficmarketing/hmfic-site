@@ -1,0 +1,89 @@
+---
+interface Props {
+  before: string;
+  after: string;
+  beforeAlt: string;
+  afterAlt: string;
+}
+const { before, after, beforeAlt, afterAlt } = Astro.props;
+---
+<div class="ba" data-before-after>
+  <img class="ba-after" src={after} alt={afterAlt} />
+  <div class="ba-before-wrap" data-ba-before-wrap>
+    <img class="ba-before" src={before} alt={beforeAlt} />
+  </div>
+  <input type="range" min="0" max="100" value="50" class="ba-slider" data-ba-slider aria-label="Before/after slider" />
+  <div class="ba-handle" data-ba-handle aria-hidden="true"></div>
+  <div class="ba-label ba-label-before">Before</div>
+  <div class="ba-label ba-label-after">After</div>
+</div>
+<style>
+  .ba {
+    position: relative;
+    width: 100%;
+    max-width: var(--col-full);
+    margin: var(--space-6) auto;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+  }
+  .ba img { display: block; width: 100%; height: auto; user-select: none; }
+  .ba-after { position: relative; z-index: 1; }
+  .ba-before-wrap {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    overflow: hidden;
+    z-index: 2;
+  }
+  .ba-before-wrap img { width: 200%; max-width: none; }
+  .ba-slider {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 4;
+  }
+  .ba-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    background: var(--accent);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .ba-handle::before,
+  .ba-handle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .ba-handle::after {
+    background: var(--paper);
+    width: 32px;
+    height: 32px;
+  }
+  .ba-label {
+    position: absolute;
+    top: 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 10px;
+    z-index: 3;
+  }
+  .ba-label-before { left: 12px; }
+  .ba-label-after { right: 12px; }
+</style>

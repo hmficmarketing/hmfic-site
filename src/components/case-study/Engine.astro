@@ -1,0 +1,37 @@
+---
+import Chapter from './Chapter.astro';
+import ContentSample from './ContentSample.astro';
+import Transition from './Transition.astro';
+
+interface Props {
+  chapterNumber: string;
+  chapterName: string;
+  title: string;
+  paragraphs: string[];
+  samples: Array<{ label: string; title: string; body: string; footnote?: string }>;
+}
+const { chapterNumber, chapterName, title, paragraphs, samples } = Astro.props;
+---
+<section class="chapter">
+  <div class="container">
+    <Chapter number={chapterNumber} name={chapterName} title={title} />
+    <div class="prose narrow">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="samples">
+      {samples.map((s) => <ContentSample {...s} />)}
+    </div>
+    <Transition nextNumber="07" nextName="What's Next" />
+  </div>
+</section>
+<style>
+  .chapter { padding: var(--space-7) 0 var(--space-8); }
+  .prose p { font-size: var(--fs-body); line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--space-4); }
+  .samples {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+    margin: var(--space-7) 0 var(--space-6);
+  }
+  @media (max-width: 800px) { .samples { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,178 @@
+---
+import Chapter from './Chapter.astro';
+
+interface Props {
+  chapterNumber: string;
+  chapterName: string;
+  title: string;
+  body: string;
+  cta: { label: string; href: string };
+}
+const { chapterNumber, chapterName, title, body } = Astro.props;
+---
+<section class="chapter offer">
+  <div class="container">
+    <Chapter number={chapterNumber} name={chapterName} title={title} />
+    <div class="prose narrow">
+      <p>{body}</p>
+    </div>
+    <form id="case-study-form" class="contact-form narrow" novalidate>
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <div class="field">
+        <label for="cs-name">Name</label>
+        <input type="text" id="cs-name" name="fullName" required autocomplete="name" placeholder="Your full name" />
+      </div>
+      <div class="field">
+        <label for="cs-email">Email</label>
+        <input type="email" id="cs-email" name="email" required autocomplete="email" placeholder="you@company.com" />
+      </div>
+      <div class="field">
+        <label for="cs-phone">Phone</label>
+        <input type="tel" id="cs-phone" name="phone" required autocomplete="tel" placeholder="(555) 555-5555" />
+      </div>
+      <div class="field">
+        <label for="cs-message">What are you looking for?</label>
+        <textarea id="cs-message" name="stuck" required rows="3" placeholder="Tell us about your store and what you need help with."></textarea>
+      </div>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAC1dOB7XQ5M40uE6" data-theme="light"></div>
+      <button type="submit" class="submit-btn">Start a conversation →</button>
+      <p class="form-status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('case-study-form');
+    if (!form) return;
+    var status = form.querySelector('.form-status');
+    var btn = form.querySelector('.submit-btn');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      status.textContent = '';
+      status.className = 'form-status';
+
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = v; });
+
+      var eventId = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+
+      fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Request failed');
+          return res.json();
+        })
+        .then(function () {
+          // Fire pixel Lead event (client-side)
+          if (typeof fbq === 'function') {
+            fbq('track', 'Lead', {
+              content_name: 'Case Study Contact',
+              content_category: 'mfp',
+            }, { eventID: eventId });
+          }
+          // Fire CAPI Lead event (server-side, non-blocking)
+          fetch('/api/meta-capi', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event_name: 'Lead',
+              event_id: eventId,
+              email: data.email,
+              phone: data.phone,
+              source_url: window.location.href,
+            }),
+          }).catch(function () {});
+
+          status.textContent = 'Sent. We will be in touch within 24 to 48 hours.';
+          status.className = 'form-status success';
+          btn.textContent = 'Sent ✓';
+          form.reset();
+        })
+        .catch(function () {
+          status.textContent = 'Something went wrong. Email matt@hmficmarketing.com directly.';
+          status.className = 'form-status error';
+          btn.disabled = false;
+          btn.textContent = 'Start a conversation →';
+        });
+    });
+  });
+</script>
+
+<style>
+  .chapter { padding: var(--space-7) 0 var(--space-9); }
+  .offer .prose p {
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0 0 var(--space-6);
+  }
+  .contact-form {
+    margin-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 540px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .field input,
+  .field textarea {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    padding: 14px 16px;
+    border: 2px solid var(--paper-edge);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 2px;
+    transition: border-color 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .cf-turnstile { margin-top: 4px; }
+  .submit-btn {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 32px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 2px;
+    transition: transform 0.15s;
+    margin-top: var(--space-3);
+    align-self: flex-start;
+  }
+  .submit-btn:hover:not(:disabled) { transform: translateY(-2px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .form-status {
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 1.5em;
+  }
+  .form-status.success { color: #2e7d32; }
+  .form-status.error { color: #c62828; }
+</style>

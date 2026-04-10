@@ -1,0 +1,39 @@
+---
+interface Props {
+  screenshots: Array<{ src: string; alt: string; caption?: string }>;
+}
+const { screenshots } = Astro.props;
+---
+<div class="grid">
+  {screenshots.map((s) => (
+    <figure>
+      <img src={s.src} alt={s.alt} loading="lazy" />
+      {s.caption && <figcaption class="mono">{s.caption}</figcaption>}
+    </figure>
+  ))}
+</div>
+<style>
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+    margin: var(--space-7) 0;
+  }
+  figure { margin: 0; max-width: 1100px; }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--paper-edge);
+    box-shadow: 0 10px 24px -14px rgba(0,0,0,.15);
+    transition: transform .2s;
+  }
+  figure img:hover { transform: translateY(-2px); }
+  figcaption {
+    margin-top: 10px;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--ink-4);
+    line-height: 1.45;
+  }
+</style>

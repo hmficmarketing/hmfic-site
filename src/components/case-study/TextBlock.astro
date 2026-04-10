@@ -1,0 +1,34 @@
+---
+import Chapter from './Chapter.astro';
+import Callout from './Callout.astro';
+import Transition from './Transition.astro';
+
+interface Props {
+  chapterNumber: string;
+  chapterName: string;
+  title: string;
+  paragraphs: string[];
+  callout?: { label: string; body: string };
+  next?: { number: string; name: string };
+}
+const { chapterNumber, chapterName, title, paragraphs, callout, next } = Astro.props;
+---
+<section class="chapter">
+  <div class="container">
+    <Chapter number={chapterNumber} name={chapterName} title={title} />
+    <div class="prose narrow">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    {callout && <Callout label={callout.label} body={callout.body} />}
+    {next && <Transition nextNumber={next.number} nextName={next.name} />}
+  </div>
+</section>
+<style>
+  .chapter { padding: var(--space-7) 0 var(--space-8); }
+  .prose p {
+    font-size: var(--fs-body);
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0 0 var(--space-4);
+  }
+</style>

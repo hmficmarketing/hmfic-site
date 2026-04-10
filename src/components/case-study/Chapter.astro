@@ -1,0 +1,56 @@
+---
+interface Props {
+  number: string;
+  name: string;
+  title: string;
+}
+const { number, name, title } = Astro.props;
+const anchor = `chapter-${number.replace('/', '')}`;
+---
+<header class="chapter-header" id={anchor}>
+  <div class="mono">Chapter</div>
+  <div class="row">
+    <div class="num">{number.replace('/', '')}<span class="slash">/</span></div>
+    <div class="meta">
+      <div class="label">Chapter {number.replace('/', '')}</div>
+      <div class="name">{name}</div>
+    </div>
+  </div>
+  <h2 class="title">{title}</h2>
+</header>
+
+<style>
+  .chapter-header { padding-top: var(--space-8); }
+  .row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: var(--space-2); }
+  .num {
+    font-family: var(--font-mono);
+    font-size: clamp(72px, 10vw, 112px);
+    font-weight: 700;
+    line-height: 0.82;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+  .num .slash { color: var(--accent); }
+  .meta { text-align: right; max-width: 14ch; padding-top: 10px; }
+  .meta .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 6px;
+  }
+  .meta .name {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .title {
+    font-size: var(--fs-chapter);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    max-width: 20ch;
+    margin: var(--space-2) 0 var(--space-6);
+  }
+</style>

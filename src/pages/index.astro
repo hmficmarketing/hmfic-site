@@ -1,3 +1,6 @@
+---
+// src/pages/index.astro — ported from the original index.html
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
   <!-- Meta Pixel Code -->
   <script>
   !function(f,b,e,v,n,t,s)
@@ -35,7 +38,7 @@
   <nav class="nav" id="nav">
     <div class="nav-inner container">
       <a href="#" class="nav-logo">
-        <img src="assets/logo.png" alt="HMFIC" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img src="/assets/logo.png" alt="HMFIC" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <span class="logo-text" style="display:none">HMFIC</span>
       </a>
       <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
@@ -70,7 +73,7 @@
   <section class="about section-pad" id="about">
     <div class="container about-inner">
       <div class="about-photo">
-        <img src="assets/matt-holmes.jpg" alt="Matt Holmes, HMFIC Marketing" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'>Matt Holmes</div>'" />
+        <img src="/assets/matt-holmes.jpg" alt="Matt Holmes, HMFIC Marketing" onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'>Matt Holmes</div>'" />
       </div>
       <div class="about-content">
         <div class="section-eyebrow">About</div>
@@ -152,41 +155,41 @@
     <div class="marquee-wrapper">
       <div class="marquee-track">
         <!-- Set 1 -->
-        <div class="logo-item"><img src="assets/client-logos/nci.png" alt="Nutritional Coaching Institute"></div>
-        <div class="logo-item"><img src="assets/client-logos/curzio.png" alt="Curzio Research"></div>
-        <div class="logo-item"><img src="assets/client-logos/freedym.png" alt="Freedym"></div>
-        <div class="logo-item"><img src="assets/client-logos/weareallsmith.png" alt="We Are All Smith"></div>
-        <div class="logo-item"><img src="assets/client-logos/strongher.png" alt="Strongher"></div>
-        <div class="logo-item"><img src="assets/client-logos/vince-delmonte.png" alt="Vince Del Monte"></div>
-        <div class="logo-item"><img src="assets/client-logos/wenning-strength.png" alt="Wenning Strength"></div>
-        <div class="logo-item"><img src="assets/client-logos/helpmygym.png" alt="Help My Gym"></div>
-        <div class="logo-item"><img src="assets/client-logos/in3-nutrition.png" alt="iN3 Nutrition"></div>
-        <div class="logo-item"><img src="assets/client-logos/ba-shields.png" alt="BA Shields"></div>
-        <div class="logo-item"><img src="assets/client-logos/identifire.png" alt="IdentiFire Safety"></div>
-        <div class="logo-item"><img src="assets/client-logos/brigade.png" alt="Brigade"></div>
-        <div class="logo-item"><img src="assets/client-logos/smoke-showin.webp" alt="Smoke Showin Apparel" style="max-height:80px"></div>
-        <div class="logo-item"><img src="assets/client-logos/heartcore.webp" alt="Heartcore Business" style="filter:brightness(0)"></div>
-        <div class="logo-item"><img src="assets/client-logos/sno-skins.png" alt="Sno Skins"></div>
-        <div class="logo-item"><img src="assets/client-logos/kinobody.webp" alt="Kinobody"></div>
-        <div class="logo-item"><img src="assets/client-logos/the-energy-drink.png" alt="The Energy Drink"></div>
+        <div class="logo-item"><img src="/assets/client-logos/nci.png" alt="Nutritional Coaching Institute"></div>
+        <div class="logo-item"><img src="/assets/client-logos/curzio.png" alt="Curzio Research"></div>
+        <div class="logo-item"><img src="/assets/client-logos/freedym.png" alt="Freedym"></div>
+        <div class="logo-item"><img src="/assets/client-logos/weareallsmith.png" alt="We Are All Smith"></div>
+        <div class="logo-item"><img src="/assets/client-logos/strongher.png" alt="Strongher"></div>
+        <div class="logo-item"><img src="/assets/client-logos/vince-delmonte.png" alt="Vince Del Monte"></div>
+        <div class="logo-item"><img src="/assets/client-logos/wenning-strength.png" alt="Wenning Strength"></div>
+        <div class="logo-item"><img src="/assets/client-logos/helpmygym.png" alt="Help My Gym"></div>
+        <div class="logo-item"><img src="/assets/client-logos/in3-nutrition.png" alt="iN3 Nutrition"></div>
+        <div class="logo-item"><img src="/assets/client-logos/ba-shields.png" alt="BA Shields"></div>
+        <div class="logo-item"><img src="/assets/client-logos/identifire.png" alt="IdentiFire Safety"></div>
+        <div class="logo-item"><img src="/assets/client-logos/brigade.png" alt="Brigade"></div>
+        <div class="logo-item"><img src="/assets/client-logos/smoke-showin.webp" alt="Smoke Showin Apparel" style="max-height:80px"></div>
+        <div class="logo-item"><img src="/assets/client-logos/heartcore.webp" alt="Heartcore Business" style="filter:brightness(0)"></div>
+        <div class="logo-item"><img src="/assets/client-logos/sno-skins.png" alt="Sno Skins"></div>
+        <div class="logo-item"><img src="/assets/client-logos/kinobody.webp" alt="Kinobody"></div>
+        <div class="logo-item"><img src="/assets/client-logos/the-energy-drink.png" alt="The Energy Drink"></div>
         <!-- Set 2 (duplicate for seamless loop) -->
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/nci.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/curzio.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/freedym.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/weareallsmith.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/strongher.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/vince-delmonte.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/wenning-strength.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/helpmygym.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/in3-nutrition.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/ba-shields.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/identifire.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/brigade.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/smoke-showin.webp" alt="" style="max-height:80px"></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/heartcore.webp" alt="" style="filter:brightness(0)"></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/sno-skins.png" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/kinobody.webp" alt=""></div>
-        <div class="logo-item" aria-hidden="true"><img src="assets/client-logos/the-energy-drink.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/nci.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/curzio.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/freedym.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/weareallsmith.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/strongher.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/vince-delmonte.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/wenning-strength.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/helpmygym.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/in3-nutrition.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/ba-shields.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/identifire.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/brigade.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/smoke-showin.webp" alt="" style="max-height:80px"></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/heartcore.webp" alt="" style="filter:brightness(0)"></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/sno-skins.png" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/kinobody.webp" alt=""></div>
+        <div class="logo-item" aria-hidden="true"><img src="/assets/client-logos/the-energy-drink.png" alt=""></div>
       </div>
     </div>
   </section>
@@ -205,7 +208,7 @@
           <div class="quote-mark">"</div>
           <p>Matt's ad system completely transformed our business. We went from struggling to scale past $50k/month to consistently hitting 6 figures. The ROI speaks for itself.</p>
           <div class="testimonial-author">
-            <img src="assets/testimonial-photos/toky.jpg" alt="Toky" onerror="this.style.display='none'" />
+            <img src="/assets/testimonial-photos/toky.jpg" alt="Toky" onerror="this.style.display='none'" />
             <div>
               <strong>Toky</strong>
               <span>eCommerce Brand Owner</span>
@@ -216,7 +219,7 @@
           <div class="quote-mark">"</div>
           <p>I've worked with a lot of media buyers. Matt is in a different league. He actually understands business, not just ads. Our cost per acquisition dropped 40% in the first 60 days.</p>
           <div class="testimonial-author">
-            <img src="assets/testimonial-photos/siimon.jpg" alt="Siimon Reynolds" onerror="this.style.display='none'" />
+            <img src="/assets/testimonial-photos/siimon.jpg" alt="Siimon Reynolds" onerror="this.style.display='none'" />
             <div>
               <strong>Siimon Reynolds</strong>
               <span>Entrepreneur & Investor</span>
@@ -227,7 +230,7 @@
           <div class="quote-mark">"</div>
           <p>The SMS marketing strategy alone paid for everything. Matt built flows we never thought to run and our repeat purchase rate jumped significantly. Highly recommend.</p>
           <div class="testimonial-author">
-            <img src="assets/testimonial-photos/jason.jpg" alt="Jason Phillips" onerror="this.style.display='none'" />
+            <img src="/assets/testimonial-photos/jason.jpg" alt="Jason Phillips" onerror="this.style.display='none'" />
             <div>
               <strong>Jason Phillips</strong>
               <span>Fitness Brand Founder</span>
@@ -465,7 +468,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-logo">
-        <img src="assets/logo.png" alt="HMFIC" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img src="/assets/logo.png" alt="HMFIC" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <span style="display:none">HMFIC</span>
       </div>
       <p class="footer-copy">&copy; 2026 HMFIC. All rights reserved.</p>
@@ -477,6 +480,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="/script.js" is:inline></script>
 </body>
 </html>

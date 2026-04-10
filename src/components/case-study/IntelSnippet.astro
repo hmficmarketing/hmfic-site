@@ -1,0 +1,105 @@
+---
+interface Props {
+  tag: string;
+  excerptLabel: string;
+  heading: string;
+  rows: Array<{ key: string; value: string }>;
+  footerLeft: string;
+  footerRight: string;
+}
+const { tag, excerptLabel, heading, rows, footerLeft, footerRight } = Astro.props;
+---
+<article class="snippet" data-tag={tag}>
+  <div class="excerpt-label">{excerptLabel}</div>
+  <h4>{heading}</h4>
+  {rows.map((row) => (
+    <div class="row">
+      <div class="k">{row.key}</div>
+      <div class="v">{row.value}</div>
+    </div>
+  ))}
+  <div class="footer-mono">
+    <span>{footerLeft}</span>
+    <span>{footerRight}</span>
+  </div>
+</article>
+<style>
+  .snippet {
+    background: var(--paper-lift);
+    border: 1px solid var(--paper-edge);
+    padding: 34px 30px 28px;
+    position: relative;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 10px 24px -14px rgba(0,0,0,.15);
+    transition: transform .2s;
+  }
+  .snippet:hover { transform: translateY(-3px); }
+  .snippet::before {
+    content: attr(data-tag);
+    position: absolute;
+    top: -14px;
+    left: 22px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    padding: 6px 14px;
+    font-weight: 700;
+  }
+  .excerpt-label {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  h4 {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 0 18px;
+    font-weight: 500;
+  }
+  .row {
+    display: flex;
+    gap: 16px;
+    margin: 10px 0;
+    font-size: 17px;
+    align-items: flex-start;
+  }
+  .row .k {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-width: 160px;
+    padding-top: 4px;
+    flex-shrink: 0;
+  }
+  .row .v {
+    color: var(--ink);
+    line-height: 1.5;
+    font-family: var(--font-serif);
+  }
+  .footer-mono {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--paper-edge);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 600px) {
+    .footer-mono { flex-direction: column; gap: 6px; }
+    .row { flex-direction: column; gap: 4px; }
+    .row .k { min-width: 0; padding-top: 0; }
+  }
+</style>

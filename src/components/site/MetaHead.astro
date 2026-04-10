@@ -1,0 +1,45 @@
+---
+interface Props {
+  title: string;
+  eyebrow: string;
+  ogImage: string;
+  slug: string;
+}
+const { title, eyebrow, ogImage, slug } = Astro.props;
+const url = `https://hmficmarketing.com/case-studies/${slug}`;
+const absoluteOg = ogImage.startsWith('http') ? ogImage : `https://hmficmarketing.com${ogImage}`;
+const description = `${eyebrow} — ${title}. A premium case study from HMFIC Marketing.`;
+---
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title} — HMFIC Marketing</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={url} />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={url} />
+<meta property="og:image" content={absoluteOg} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="HMFIC Marketing" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteOg} />
+
+<link rel="icon" href="/favicon.ico" />
+
+<!-- Meta Pixel (HMFIC) -->
+<script is:inline>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','318856247215986');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=318856247215986&ev=PageView&noscript=1"/></noscript>

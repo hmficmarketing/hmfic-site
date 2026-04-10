@@ -1,0 +1,30 @@
+---
+interface Props { label: string; title: string; body: string; footnote?: string; }
+const { label, title, body, footnote } = Astro.props;
+---
+<article class="sample">
+  <div class="label">{label}</div>
+  <h4>{title}</h4>
+  <p>{body}</p>
+  {footnote && <div class="footnote mono">{footnote}</div>}
+</article>
+<style>
+  .sample {
+    background: var(--paper-lift);
+    border: 1px solid var(--paper-edge);
+    padding: 24px 22px;
+    box-shadow: 0 10px 24px -14px rgba(0,0,0,.12);
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  h4 { font-size: 18px; line-height: 1.25; margin: 0 0 10px; font-weight: 500; }
+  p { font-size: 14px; line-height: 1.55; color: var(--ink-2); margin: 0; }
+  .footnote { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--paper-edge); color: var(--muted); }
+</style>

@@ -1,0 +1,40 @@
+:root {
+  /* Colors — Editorial Brutalism palette */
+  --paper: #f5f0e6;
+  --paper-lift: #fffdf7;
+  --paper-edge: #e0d8c4;
+  --ink: #1a1a1a;
+  --ink-2: #2a241c;
+  --ink-3: #4a4238;
+  --ink-4: #6b6055;
+  --muted: #8a6d3b;
+  --accent: #d94512;
+
+  /* Type */
+  --font-serif: 'Charter', 'Iowan Old Style', 'Palatino', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, 'Courier New', monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+
+  /* Scale */
+  --fs-hero: clamp(40px, 6vw, 68px);
+  --fs-chapter: clamp(32px, 4.5vw, 46px);
+  --fs-body: 18px;
+  --fs-dek: 19px;
+  --fs-meta: 10.5px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* Layout */
+  --col-narrow: 58ch;
+  --col-wide: 880px;
+  --col-full: 1120px;
+}
