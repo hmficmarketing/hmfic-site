@@ -12,43 +12,35 @@ const svg = `
   <rect x="0" y="0" width="100%" height="6" fill="#c45a2c"/>
 
   <!-- Eyebrow -->
-  <text x="80" y="90" font-family="monospace" font-size="16" letter-spacing="3" fill="#888" text-anchor="start">
-    HMFIC / BUILD LOG · ● LIVE · № 001
+  <text x="600" y="100" font-family="monospace" font-size="16" letter-spacing="3" fill="#888" text-anchor="middle">
+    HMFIC / BUILD LOG · № 001
   </text>
 
   <!-- Divider line -->
-  <line x1="80" y1="120" x2="1120" y2="120" stroke="#333" stroke-width="1"/>
+  <line x1="200" y1="130" x2="1000" y2="130" stroke="#333" stroke-width="1"/>
 
   <!-- Headline line 1 -->
-  <text x="80" y="220" font-family="Georgia, serif" font-size="72" font-weight="500" fill="#f5f0eb" letter-spacing="-2">
+  <text x="600" y="230" font-family="Georgia, serif" font-size="68" font-weight="500" fill="#f5f0eb" letter-spacing="-2" text-anchor="middle">
     Rebuilding MFP's
   </text>
 
   <!-- Headline line 2 -->
-  <text x="80" y="310" font-family="Georgia, serif" font-size="72" font-weight="500" fill="#f5f0eb" letter-spacing="-2">
-    Shopify
+  <text x="600" y="316" font-family="Georgia, serif" font-size="68" font-weight="500" fill="#f5f0eb" letter-spacing="-2" text-anchor="middle">
+    Shopify from zero.
   </text>
-
-  <!-- Accent underlined word -->
-  <text x="340" y="310" font-family="Georgia, serif" font-size="72" font-weight="500" fill="#f5f0eb" letter-spacing="-2">
-    from zero.
-  </text>
-  <rect x="340" y="318" width="340" height="5" fill="#c45a2c"/>
+  <rect x="490" y="324" width="280" height="5" fill="#c45a2c"/>
 
   <!-- Subhead -->
-  <text x="80" y="400" font-family="Georgia, serif" font-size="26" fill="#999" letter-spacing="0">
+  <text x="600" y="410" font-family="Georgia, serif" font-size="24" fill="#999" letter-spacing="0" text-anchor="middle">
     A full storefront rebuild and an AI content engine
   </text>
-  <text x="80" y="438" font-family="Georgia, serif" font-size="26" fill="#999" letter-spacing="0">
+  <text x="600" y="446" font-family="Georgia, serif" font-size="24" fill="#999" letter-spacing="0" text-anchor="middle">
     that produced weeks of assets in under a week.
   </text>
 
   <!-- Bottom bar -->
   <rect x="0" y="560" width="100%" height="70" fill="#111"/>
-  <text x="80" y="602" font-family="monospace" font-size="15" letter-spacing="2" fill="#666">
-    FILED APR 2026
-  </text>
-  <text x="1120" y="602" font-family="monospace" font-size="15" letter-spacing="2" fill="#666" text-anchor="end">
+  <text x="600" y="602" font-family="monospace" font-size="15" letter-spacing="2" fill="#666" text-anchor="middle">
     HMFICMARKETING.COM
   </text>
 </svg>
