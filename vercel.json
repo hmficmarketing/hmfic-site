@@ -2,6 +2,9 @@
   "buildCommand": "npm run build",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/mfpcasestudy", "destination": "/case-studies/mfp", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
