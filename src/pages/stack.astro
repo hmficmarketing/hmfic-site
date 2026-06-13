@@ -218,5 +218,36 @@
       .bio-inner { flex-direction: column; }
     }
   </style>
+
+  <script>
+    document.querySelectorAll('form.optin-form').forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = form.querySelector('.form-msg');
+        const btn = form.querySelector('button[type=submit]');
+        const data = Object.fromEntries(new FormData(form).entries());
+        if (!data['cf-turnstile-response']) {
+          msg.textContent = 'Please complete the spam check and try again.';
+          return;
+        }
+        btn.disabled = true;
+        msg.textContent = 'Sending...';
+        try {
+          const r = await fetch('/api/stack-optin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          if (!r.ok) throw new Error('bad status');
+          if (window.fbq) fbq('track', 'Lead', { content_name: '5 Prompts Pack', source: data.source });
+          form.querySelectorAll('input, button, .cf-turnstile').forEach((el) => (el.style.display = 'none'));
+          msg.textContent = 'Check your inbox. The pack is on its way.';
+        } catch (err) {
+          btn.disabled = false;
+          msg.textContent = 'Something went wrong. Please try again.';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

@@ -57,3 +57,20 @@ test('privacy page loads and mentions Kit and unsubscribe', async ({ page }) => 
   await expect(page.locator('body')).toContainText('Kit');
   await expect(page.locator('body')).toContainText('unsubscribe');
 });
+
+test('submitting the hero form swaps to a success message', async ({ page }) => {
+  await page.route('**/api/stack-optin', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) }),
+  );
+  await page.goto('/stack');
+  const form = page.locator('form.optin-form').first();
+  await form.locator('input[type=email]').fill('alice@example.com');
+  await page.evaluate(() => {
+    const f = document.querySelector('form.optin-form');
+    const t = document.createElement('input');
+    t.name = 'cf-turnstile-response'; t.value = 'test-token'; t.type = 'hidden';
+    f.appendChild(t);
+  });
+  await form.locator('button[type=submit]').click();
+  await expect(form.locator('.form-msg')).toContainText(/check your inbox/i);
+});
