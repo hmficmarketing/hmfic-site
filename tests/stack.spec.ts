@@ -50,3 +50,10 @@ test('mobile: hero padding tightens and email input is full-width', async ({ pag
   const box = await input.boundingBox();
   expect(box!.width).toBeGreaterThan(280); // spans most of the 390px viewport
 });
+
+test('privacy page loads and mentions Kit and unsubscribe', async ({ page }) => {
+  await page.goto('/privacy');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(/privacy/i);
+  await expect(page.locator('body')).toContainText('Kit');
+  await expect(page.locator('body')).toContainText('unsubscribe');
+});
