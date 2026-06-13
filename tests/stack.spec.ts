@@ -58,6 +58,16 @@ test('privacy page loads and mentions Kit and unsubscribe', async ({ page }) => 
   await expect(page.locator('body')).toContainText('unsubscribe');
 });
 
+test('each form has a required, unchecked marketing-consent checkbox', async ({ page }) => {
+  await page.goto('/stack');
+  const boxes = page.locator('form.optin-form input[name=consent]');
+  await expect(boxes).toHaveCount(2);
+  for (let i = 0; i < 2; i++) {
+    await expect(boxes.nth(i)).not.toBeChecked();
+    await expect(boxes.nth(i)).toHaveAttribute('required', '');
+  }
+});
+
 test('submitting the hero form swaps to a success message', async ({ page }) => {
   await page.route('**/api/stack-optin', (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ok: true }) }),
@@ -65,6 +75,7 @@ test('submitting the hero form swaps to a success message', async ({ page }) => 
   await page.goto('/stack');
   const form = page.locator('form.optin-form').first();
   await form.locator('input[type=email]').fill('alice@example.com');
+  await form.locator('input[name=consent]').check();
   await page.evaluate(() => {
     const f = document.querySelector('form.optin-form');
     const t = document.createElement('input');
