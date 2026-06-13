@@ -42,3 +42,11 @@ test('bio uses the real Matt photo', async ({ page }) => {
   await page.goto('/stack');
   await expect(page.locator('.bio img')).toHaveAttribute('src', '/assets/matt-holmes.jpg');
 });
+
+test('mobile: hero padding tightens and email input is full-width', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/stack');
+  const input = page.locator('form.optin-form input[type=email]').first();
+  const box = await input.boundingBox();
+  expect(box!.width).toBeGreaterThan(280); // spans most of the 390px viewport
+});

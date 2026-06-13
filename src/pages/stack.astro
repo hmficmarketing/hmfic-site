@@ -162,10 +162,11 @@
     .hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 30px 0 0; }
     .hl { background: linear-gradient(104deg, rgba(0,0,0,0) 0.9%, rgba(225,55,40,0.22) 2.4%, rgba(225,55,40,0.28) 70%, rgba(0,0,0,0) 98%); padding: 0 3px; }
     .hero-sub { font-size: 17px; color: var(--ink-soft); line-height: 1.6; margin-top: 18px; max-width: 560px; }
-    .hero-note { font-family: Caveat, cursive; font-size: 24px; color: var(--red); transform: rotate(-2deg); margin-top: 18px; }
+    .hero-note { font-family: Caveat, cursive; font-size: 24px; color: var(--red); transform: rotate(-2deg); margin-top: 18px; display: inline-block; }
     .optin-form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; max-width: 540px; }
-    .optin-form .hp { position: absolute; left: -9999px; }
+    .optin-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
     .optin-form input[type=email] { flex: 1; min-width: 220px; border: 1.5px solid #ccc; border-radius: 8px; padding: 14px 18px; font-size: 15px; }
+    .optin-form input[type=email]:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
     .optin-form button { background: var(--red); color: #fff; border: none; border-radius: 8px; padding: 14px 22px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px -4px rgba(225,55,40,0.5); }
     .optin-form .cf-turnstile { flex-basis: 100%; }
     .form-msg { flex-basis: 100%; margin: 4px 0 0; font-size: 14px; color: var(--ink-soft); min-height: 18px; }
@@ -201,6 +202,21 @@
     .foot-legal { font-size: 12px; color: #888; margin: 0; max-width: 60%; }
     .foot-links { margin: 0; display: flex; gap: 18px; }
     .foot-links a { font-size: 12px; color: #aaa; text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 48px 22px 40px; background-image: repeating-linear-gradient(transparent, transparent 27px, #eceae2 28px); }
+      .hero-margin { left: 16px; }
+      .hero h1 { font-size: 30px; }
+      .hero-sub { font-size: 16px; }
+      .section { padding: 44px 22px; }
+      footer { padding: 24px 22px; }
+      .foot-legal { max-width: 100%; }
+      .optin-form { flex-direction: column; }
+      .optin-form input[type=email], .optin-form button { width: 100%; min-width: 0; }
+      .prompt-card { flex-wrap: wrap; gap: 12px; padding: 20px; }
+      .prompt-card .time { width: 100%; }
+      .bio-inner { flex-direction: column; }
+    }
   </style>
 </body>
 </html>
