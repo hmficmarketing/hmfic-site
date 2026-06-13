@@ -1,14 +1,25 @@
-# /stack Launch Checklist (do before publishing)
+# /stack Launch Checklist
 
-Code is done and tested. These are the human/config gates that remain:
+Page is LIVE on production (hmficmarketing.com/stack). Status of gates:
 
-- [ ] **Produce the real PDF** and replace `public/downloads/5-prompts-pack.pdf` (same filename). Prompts drafted in `Vault/HMFIC Marketing/List Build/Prompt-1..5`. Needs handwritten cover + worked examples + Meta AI bonus + compile.
-- [ ] **Kit env vars in Vercel:** `KIT_API_KEY` (from Kit account settings) and `KIT_STACK_TAG_ID` (numeric ID of a tag named `stack-pack` — create the tag in Kit first, then read its ID).
-- [ ] **Kit form set to single opt-in** so the "instant, lands in your inbox in 60 seconds" copy is true.
-- [ ] **Confirm `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`** are already in the Vercel project (they power `api/submit.js`, so they should be). NOTE: if `TURNSTILE_SECRET_KEY` is missing, the endpoint silently skips spam verification — make sure it is set in production.
-- [ ] **Smoke test on the Vercel preview deploy:** submit a real email, confirm (a) the pack email arrives, (b) the subscriber appears in Kit with the `stack-pack` tag, (c) the Meta pixel logs a Lead event in Events Manager for pixel `318856247215986`.
-- [ ] **Optional:** add `/stack` to any nav or link it from the carousel bio.
+- [x] **Real PDF** shipped to `public/downloads/5-prompts-pack.pdf` (2026-06-13, 7-page final).
+- [x] **Kit env vars in Vercel:** `KIT_API_KEY` + `KIT_STACK_TAG_ID` (= `20323291`) set in Production.
+- [x] **Opt-in confirmed:** API adds land subscribers `active` + tagged (no double opt-in to disable). Verified with a test add.
+- [x] **`RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`** confirmed present in Production.
+- [x] **Deployed wiring smoke-tested:** endpoint live, Turnstile gate enforcing, honeypot works.
 
-## Deferred to v2 (not in this build)
+## Remaining before driving traffic
+- [ ] **Build the Kit welcome automation** — the endpoint now delivers via Kit, not Resend, so the pack ONLY gets sent if this automation exists. Shape: `stack-pack` tag → Email 1 (pack) → wait 1 day → Email Opens condition → No path → Email 2 (FOMO). Copy + click-path in `Vault/HMFIC Marketing/List Build/Welcome Sequence.md`. **Until this is live, opt-ins get tagged but receive no pack email.**
+- [ ] **Human happy-path test:** submit a real email on the live page, confirm Email 1 arrives with a working PDF download, and the subscriber is tagged `stack-pack`.
+- [ ] **Then** link `/stack` from bio / announce.
+
+## TODO: CAPI tracking for /stack leads
+Right now the only Meta signal is the **client-side** pixel `fbq('track','Lead')` (browser-only, lossy: ad blockers, iOS, etc). To track and optimize these leads properly, add a **server-side Meta Conversions API (CAPI) Lead event** from the endpoint.
+- Fire it in `api/stack-optin.js` after a successful `addToKit` (a `TODO(CAPI)` marker is already in the code at `deliverOptin`).
+- Send `Lead` for pixel `318856247215986` with the subscriber's **hashed email** (sha256), client IP + user agent, and an **`event_id`** that matches a client-side `fbq('track','Lead',{eventID})` so the browser + server events **dedupe**.
+- Reuse the **Agency CAPI Pattern** convention (env-prefixed token, one function/handler, audit log). See vault memory `reference_agency_capi_pattern.md` and `feedback_capi_verification_principle.md` (verify via events_received + event name, not just "success").
+- Needs: a Meta CAPI access token for the pixel's dataset (`927123400783570` is the older pixel; we're using `318856247215986`), stored as a Vercel env var.
+
+## Deferred to v2
 - Social-proof line ("X operators downloaded this") once real download numbers exist.
 - A/B test of headline/subhead alternates (in `Opt-in Page Copy v1.md` Section 1).
