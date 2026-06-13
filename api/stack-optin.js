@@ -1,6 +1,13 @@
 const { Resend } = require('resend');
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+
+function throwIfResendError({ data, error }) {
+  if (error) throw new Error(`Resend error: ${error.name || 'unknown'} — ${error.message || ''}`);
+  return data;
+}
+
+const escHtml = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 function validateOptin(body) {
   const raw = (body.email || '').trim().toLowerCase();
@@ -35,24 +42,21 @@ async function sendDelivery(email) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error('Resend not configured');
   const resend = new Resend(apiKey);
-  return resend.emails.send({
-    from: 'Matt Holmes <matt@hmficmarketing.com>',
-    to: email,
-    subject: 'Your 5 prompts are here',
-    html: buildDeliveryHtml(),
-  });
+  const res = await resend.emails.send({ from: 'Matt Holmes <matt@hmficmarketing.com>', to: email, subject: 'Your 5 prompts are here', html: buildDeliveryHtml() });
+  return throwIfResendError(res);
 }
 
 async function notifyMatt(email) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error('Resend not configured');
   const resend = new Resend(apiKey);
-  return resend.emails.send({
+  const res = await resend.emails.send({
     from: 'HMFIC Site <matt@hmficmarketing.com>',
     to: 'matt@hmficmarketing.com',
     subject: `New /stack opt-in: ${email}`,
-    html: `<p>${email} just opted in for the 5 Prompts pack.</p>`,
+    html: `<p>${escHtml(email)} just opted in for the 5 Prompts pack.</p>`,
   });
+  return throwIfResendError(res);
 }
 
 function buildDeliveryHtml() {
@@ -128,3 +132,4 @@ module.exports = async function handler(req, res) {
 
 module.exports.validateOptin = validateOptin;
 module.exports.deliverOptin = deliverOptin;
+module.exports.throwIfResendError = throwIfResendError;
