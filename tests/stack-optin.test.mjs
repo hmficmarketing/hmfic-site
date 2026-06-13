@@ -14,24 +14,22 @@ test('accepts a valid email and normalizes case + whitespace', () => {
   assert.deepEqual(validateOptin({ email: '  Alice@Example.COM ' }), { ok: true, email: 'alice@example.com' });
 });
 
-test('deliverOptin returns ok when Kit rejects but delivery resolves', async () => {
-  const calls = [];
+// Kit now owns delivery (the stack-pack tag triggers the Kit automation), so
+// addToKit is the critical path: if it fails, the subscriber gets nothing.
+test('deliverOptin returns ok:false when Kit add fails', async () => {
   const result = await deliverOptin('alice@example.com', {
-    addToKit: async () => { calls.push('kit'); throw new Error('Kit down'); },
-    sendDelivery: async () => { calls.push('delivery'); return { id: 'em_1' }; },
-    notifyMatt: async () => { calls.push('notify'); return { id: 'em_2' }; },
-  });
-  assert.equal(result.ok, true);
-  assert.ok(calls.includes('delivery'));
-});
-
-test('deliverOptin returns ok:false when delivery itself fails', async () => {
-  const result = await deliverOptin('alice@example.com', {
-    addToKit: async () => ({}),
-    sendDelivery: async () => { throw new Error('Resend down'); },
+    addToKit: async () => { throw new Error('Kit down'); },
     notifyMatt: async () => ({}),
   });
   assert.equal(result.ok, false);
+});
+
+test('deliverOptin returns ok:true when Kit succeeds even if the Matt notification fails', async () => {
+  const result = await deliverOptin('alice@example.com', {
+    addToKit: async () => true,
+    notifyMatt: async () => { throw new Error('notify down'); },
+  });
+  assert.equal(result.ok, true);
 });
 
 test('throwIfResendError throws when Resend returns an error object', () => {

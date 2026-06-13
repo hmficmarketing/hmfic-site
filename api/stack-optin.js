@@ -7,7 +7,7 @@ function throwIfResendError({ data, error }) {
   return data;
 }
 
-const escHtml = (s) => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function validateOptin(body) {
   const raw = (body.email || '').trim().toLowerCase();
@@ -17,8 +17,11 @@ function validateOptin(body) {
 }
 
 const KIT_BASE = 'https://api.kit.com/v4';
-const PDF_URL = 'https://hmficmarketing.com/downloads/5-prompts-pack.pdf';
 
+// Adds the subscriber to Kit and applies the stack-pack tag. The tag is the
+// trigger for the Kit automation that delivers the pack and runs the day-2
+// follow-up, so this is the critical delivery path: if it fails, the
+// subscriber gets no pack and no follow-up.
 async function addToKit(email) {
   const apiKey = process.env.KIT_API_KEY;
   const tagId = process.env.KIT_STACK_TAG_ID;
@@ -38,14 +41,6 @@ async function addToKit(email) {
   return true;
 }
 
-async function sendDelivery(email) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) throw new Error('Resend not configured');
-  const resend = new Resend(apiKey);
-  const res = await resend.emails.send({ from: 'Matt Holmes <matt@hmficmarketing.com>', to: email, subject: 'Your 5 prompts are here', html: buildDeliveryHtml() });
-  return throwIfResendError(res);
-}
-
 async function notifyMatt(email) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error('Resend not configured');
@@ -59,34 +54,27 @@ async function notifyMatt(email) {
   return throwIfResendError(res);
 }
 
-function buildDeliveryHtml() {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:40px 20px;"><tr><td align="center">
-    <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;overflow:hidden;max-width:600px;">
-      <tr><td style="background:#0a0a0a;padding:32px 40px;text-align:center;"><span style="font-size:28px;font-weight:800;color:#fff;letter-spacing:2px;">HMFIC</span></td></tr>
-      <tr><td style="background:#e13728;height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>
-      <tr><td style="padding:40px;">
-        <h1 style="margin:0 0 16px;font-size:22px;color:#0a0a0a;">Here are your 5 prompts.</h1>
-        <p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:#333;">These are the actual operating prompts I run inside the agency every week. Paste-and-go, with worked examples so you know what good output looks like.</p>
-        <p style="margin:0 0 24px;"><a href="${PDF_URL}" style="background:#e13728;color:#fff;text-decoration:none;padding:14px 24px;border-radius:8px;font-weight:700;font-size:16px;display:inline-block;">Download the pack</a></p>
-        <p style="margin:0;font-size:16px;line-height:1.6;color:#333;">Talk soon,<br><strong>Matt Holmes</strong><br><span style="color:#888;font-size:14px;">HMFIC Marketing</span></p>
-      </td></tr>
-    </table>
-  </td></tr></table>
-</body></html>`;
-}
-
+// Kit delivers the pack (via the stack-pack automation), so addToKit is the
+// critical path. notifyMatt is best-effort and never blocks the response.
+//
+// TODO(CAPI): once the server-side Meta Conversions API bridge is set up, fire
+// a server-side "Lead" event here (after a successful addToKit) for pixel
+// 318856247215986, with the hashed email + an event_id that matches the
+// client-side fbq('track','Lead', {eventID}) call so the two dedupe. This is
+// what makes the leads trackable/optimizable in Meta beyond the browser pixel.
+// See Agency CAPI Pattern in vault memory for the reusable convention.
 async function deliverOptin(email, deps) {
-  const { addToKit, sendDelivery, notifyMatt } = deps;
-  const [kitRes, deliveryRes, notifyRes] = await Promise.allSettled([
-    addToKit(email), sendDelivery(email), notifyMatt(email),
-  ]);
-  if (kitRes.status === 'rejected') console.error('Kit error (subscriber still gets pack):', kitRes.reason);
-  if (notifyRes.status === 'rejected') console.error('Notify error:', notifyRes.reason);
-  if (deliveryRes.status === 'rejected') {
-    console.error('Delivery FAILED:', deliveryRes.reason);
+  const { addToKit, notifyMatt } = deps;
+  try {
+    await addToKit(email);
+  } catch (e) {
+    console.error('Kit add FAILED (no pack sent):', e);
     return { ok: false };
+  }
+  try {
+    await notifyMatt(email);
+  } catch (e) {
+    console.error('Notify error:', e);
   }
   return { ok: true };
 }
@@ -125,8 +113,8 @@ module.exports = async function handler(req, res) {
   const v = validateOptin(body);
   if (!v.ok) return res.status(422).json({ error: v.error });
 
-  const result = await deliverOptin(v.email, { addToKit, sendDelivery, notifyMatt });
-  if (!result.ok) return res.status(502).json({ error: 'Could not send the pack. Please try again.' });
+  const result = await deliverOptin(v.email, { addToKit, notifyMatt });
+  if (!result.ok) return res.status(502).json({ error: 'Could not sign you up. Please try again.' });
   return res.status(200).json({ ok: true });
 };
 
