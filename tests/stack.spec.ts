@@ -23,3 +23,22 @@ test('renders all 5 prompt cards numbered 01-05', async ({ page }) => {
   await expect(cards.first()).toContainText('customer avatar');
   await expect(cards.nth(4)).toContainText('four platforms');
 });
+
+test('faq accordion is collapsed by default and opens on click', async ({ page }) => {
+  await page.goto('/stack');
+  const first = page.locator('.faq details').first();
+  await expect(first).not.toHaveAttribute('open', '');
+  await first.locator('summary').click();
+  await expect(first).toHaveAttribute('open', '');
+});
+
+test('has a second opt-in form and footer privacy link', async ({ page }) => {
+  await page.goto('/stack');
+  await expect(page.locator('form.optin-form')).toHaveCount(2);
+  await expect(page.locator('footer a[href="/privacy"]')).toBeVisible();
+});
+
+test('bio uses the real Matt photo', async ({ page }) => {
+  await page.goto('/stack');
+  await expect(page.locator('.bio img')).toHaveAttribute('src', '/assets/matt-holmes.jpg');
+});

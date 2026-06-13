@@ -93,6 +93,53 @@
         </div>
       </div>
     </section>
+
+    <section class="section">
+      <h2>Who this is built for</h2>
+      <ul class="checks">
+        <li><span class="check">&#10003;</span> You're tired of AI slop that sounds like everybody else and isn't unique to your voice.</li>
+        <li><span class="check">&#10003;</span> You want frameworks built by the people who actually wrote the playbook, fine-tuned inside the prompts. Not recycled Twitter scraps.</li>
+        <li><span class="check">&#10003;</span> You'd rather have 5 prompts you can start using today than 50 cool ideas you'll never use.</li>
+      </ul>
+    </section>
+
+    <section class="section section-alt bio">
+      <h2>Who put this together</h2>
+      <div class="bio-inner">
+        <img src="/assets/matt-holmes.jpg" alt="Matt Holmes, HMFIC Marketing"
+          onerror="this.parentElement.innerHTML='<div class=&quot;bio-ph&quot;>Matt Holmes</div>'" />
+        <div class="bio-text">
+          <p>I'm Matt Holmes. I run HMFIC Marketing, managing seven figures in paid ad spend across e-commerce, info-product, and service clients. These are the prompts I run every week inside the agency. Not theory. Not a course. The actual operating instructions.</p>
+          <p>I built this pack because I needed it. Most "AI prompts for marketers" content online is screenshots and hype. These are the prompts themselves, formatted for paste-and-go, with worked examples so you know what good output looks like before you run them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq">
+      <h2>Quick questions</h2>
+      <details><summary>Free or paid Claude/ChatGPT?</summary><p>Free works. Every prompt produces real results on the free tier. Paid versions give you longer single-run outputs, but you don't need them.</p></details>
+      <details><summary>How fast does the pack arrive?</summary><p>Instant. The PDF lands in your inbox the moment you submit. Check spam if you don't see it in 60 seconds.</p></details>
+      <details><summary>Are these actually the prompts you use, or just freebie content?</summary><p>The actual prompts. I run them inside HMFIC every week. We tested all 5 on a real DTC brand before publishing.</p></details>
+      <details><summary>What happens after I download?</summary><p>One pack now. One email a week after, with one specific prompt or operating insight I'm using. No funnel cascade, no upsell pressure. Unsubscribe in two clicks.</p></details>
+      <details><summary>I'm not an agency. Does this work for me?</summary><p>Yes. The prompts work for any operator who runs their own marketing: solo founders, info-product creators, content businesses, e-commerce owners. The avatar prompt alone is worth the email if you sell anything to anyone.</p></details>
+    </section>
+
+    <section class="section final-cta">
+      <h2>Download the pack now</h2>
+      <form class="optin-form" data-source="footer">
+        <input type="hidden" name="source" value="stack-footer" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+        <input type="email" name="email" required placeholder="you@yourbusiness.com" aria-label="Email address" />
+        <button type="submit">Yes, send me the prompts.</button>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC1dOB7XQ5M40uE6" data-theme="light"></div>
+        <p class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <footer>
+      <p class="foot-legal">HMFIC Marketing 2026. Your email goes into Kit, our email tool. We don't sell or share it. Unsubscribe any time.</p>
+      <p class="foot-links"><a href="/privacy">Privacy</a> <a href="https://hmficmarketing.com">hmficmarketing.com</a></p>
+    </footer>
   </main>
 
   <style>
@@ -135,6 +182,24 @@
     .prompt-card h3 { font-size: 17px; font-weight: 700; margin: 0; }
     .prompt-card .card-body p { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 6px 0 0; }
     .prompt-card .time { font-family: Caveat, cursive; font-size: 19px; color: #888; white-space: nowrap; display: inline-block; transform: rotate(-3deg); }
+
+    .checks { list-style: none; padding: 0; margin: 26px 0 0; display: flex; flex-direction: column; gap: 16px; max-width: 600px; }
+    .checks li { display: flex; gap: 14px; align-items: flex-start; font-size: 15px; color: #333; line-height: 1.55; }
+    .check { font-family: Caveat, cursive; font-size: 22px; color: var(--red); line-height: 1; }
+    .bio-inner { display: flex; gap: 28px; align-items: flex-start; margin-top: 26px; }
+    .bio-inner img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; transform: rotate(-2deg); box-shadow: 0 8px 20px -10px rgba(40,30,10,0.3); flex-shrink: 0; }
+    .bio-ph { width: 120px; height: 120px; border-radius: 10px; background: #ddd9cf; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #999; }
+    .bio-text p { font-size: 15px; color: #333; line-height: 1.65; margin: 0 0 14px; }
+    .faq details { border-bottom: 1px solid var(--line); padding: 18px 4px; max-width: 620px; }
+    .faq summary { font-size: 15px; font-weight: 600; cursor: pointer; list-style: none; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq details p { font-size: 14px; color: var(--ink-soft); line-height: 1.55; margin: 10px 0 0; }
+    .final-cta { text-align: center; background-image: repeating-linear-gradient(transparent, transparent 31px, #eceae2 32px); }
+    .final-cta .optin-form { margin: 26px auto 0; }
+    footer { background: #171614; padding: 28px 64px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .foot-legal { font-size: 12px; color: #888; margin: 0; max-width: 60%; }
+    .foot-links { margin: 0; display: flex; gap: 18px; }
+    .foot-links a { font-size: 12px; color: #aaa; text-decoration: none; }
   </style>
 </body>
 </html>
