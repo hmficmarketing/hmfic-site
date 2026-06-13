@@ -31,7 +31,21 @@
 </head>
 <body>
   <main class="stack">
-    <!-- sections added in later tasks -->
+    <section class="hero">
+      <div class="hero-margin"></div>
+      <div class="eyebrow">HMFIC Marketing</div>
+      <h1>5 prompts to build a brand voice and write copy like a <span class="hl">7-figure agency</span>.</h1>
+      <p class="hero-sub">Skip the cookie-cutter prompts everyone else is shipping. These are the fine-tuned operating prompts from inside my agency. Brand voice, ad copy, hooks, and email in under 30 minutes.</p>
+      <p class="hero-note">the actual prompts, not screenshots &#8600;</p>
+      <form class="optin-form" data-source="hero">
+        <input type="hidden" name="source" value="stack-hero" />
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+        <input type="email" name="email" required placeholder="you@yourbusiness.com" aria-label="Email address" />
+        <button type="submit">Yes, send me the prompts.</button>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAC1dOB7XQ5M40uE6" data-theme="light"></div>
+        <p class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
   </main>
 
   <style>
@@ -46,6 +60,21 @@
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif; color: var(--ink); background: var(--paper-alt); }
     .stack { max-width: 760px; margin: 0 auto; background: var(--paper); }
+
+    .hero { position: relative; padding: 72px 64px 64px; background: var(--paper);
+      background-image: repeating-linear-gradient(transparent, transparent 31px, #eceae2 32px); }
+    .hero-margin { position: absolute; top: 0; bottom: 0; left: 44px; width: 1px; background: rgba(225,55,40,0.18); }
+    .eyebrow { font-size: 12px; letter-spacing: 0.14em; color: #999; text-transform: uppercase; font-weight: 600; }
+    .hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 30px 0 0; }
+    .hl { background: linear-gradient(104deg, rgba(0,0,0,0) 0.9%, rgba(225,55,40,0.22) 2.4%, rgba(225,55,40,0.28) 70%, rgba(0,0,0,0) 98%); padding: 0 3px; }
+    .hero-sub { font-size: 17px; color: var(--ink-soft); line-height: 1.6; margin-top: 18px; max-width: 560px; }
+    .hero-note { font-family: Caveat, cursive; font-size: 24px; color: var(--red); transform: rotate(-2deg); margin-top: 18px; }
+    .optin-form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; max-width: 540px; }
+    .optin-form .hp { position: absolute; left: -9999px; }
+    .optin-form input[type=email] { flex: 1; min-width: 220px; border: 1.5px solid #ccc; border-radius: 8px; padding: 14px 18px; font-size: 15px; }
+    .optin-form button { background: var(--red); color: #fff; border: none; border-radius: 8px; padding: 14px 22px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px -4px rgba(225,55,40,0.5); }
+    .optin-form .cf-turnstile { flex-basis: 100%; }
+    .form-msg { flex-basis: 100%; margin: 4px 0 0; font-size: 14px; color: var(--ink-soft); min-height: 18px; }
   </style>
 </body>
 </html>
