@@ -230,6 +230,10 @@
   </style>
 
   <script>
+    const readCookie = (name) => {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : undefined;
+    };
     document.querySelectorAll('form.optin-form').forEach((form) => {
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -240,6 +244,16 @@
           msg.textContent = 'Please complete the spam check and try again.';
           return;
         }
+        // One event_id shared by the browser Lead and the server-side CAPI Lead
+        // so Meta dedupes the two into a single conversion. Forward the Meta
+        // cookies + page URL for server-side match quality.
+        const eventId = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()) + Math.random().toString(36).slice(2);
+        data.event_id = eventId;
+        data.event_source_url = location.href;
+        const fbp = readCookie('_fbp');
+        const fbc = readCookie('_fbc');
+        if (fbp) data.fbp = fbp;
+        if (fbc) data.fbc = fbc;
         btn.disabled = true;
         msg.textContent = 'Sending...';
         try {
@@ -249,7 +263,7 @@
             body: JSON.stringify(data),
           });
           if (!r.ok) throw new Error('bad status');
-          if (window.fbq) fbq('track', 'Lead', { content_name: '5 Prompts Pack', source: data.source });
+          if (window.fbq) fbq('track', 'Lead', { content_name: '5 Prompts Pack', source: data.source }, { eventID: eventId });
           form.querySelectorAll('input, button, .cf-turnstile, .consent').forEach((el) => (el.style.display = 'none'));
           msg.textContent = 'Check your inbox. The pack is on its way.';
         } catch (err) {

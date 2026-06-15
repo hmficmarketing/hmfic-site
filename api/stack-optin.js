@@ -1,6 +1,9 @@
 const { Resend } = require('resend');
+const crypto = require('crypto');
 
 const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+
+const sha256 = (s) => crypto.createHash('sha256').update(String(s)).digest('hex');
 
 function throwIfResendError({ data, error }) {
   if (error) throw new Error(`Resend error: ${error.name || 'unknown'} — ${error.message || ''}`);
@@ -54,22 +57,69 @@ async function notifyMatt(email) {
   return throwIfResendError(res);
 }
 
+// Builds the Meta Conversions API "Lead" payload. `email` must already be
+// normalized (lowercased + trimmed) — validateOptin does that. The email is
+// the only PII sent, hashed SHA-256 per Meta's matching spec. event_id is what
+// dedupes this server event against the browser fbq('track','Lead',{eventID}).
+function buildCapiPayload(email, ctx = {}) {
+  const { eventId, eventSourceUrl, clientIp, userAgent, fbp, fbc, eventTime } = ctx;
+  const userData = { em: [sha256(email)] };
+  if (clientIp) userData.client_ip_address = clientIp;
+  if (userAgent) userData.client_user_agent = userAgent;
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+  const event = {
+    event_name: 'Lead',
+    event_time: eventTime || Math.floor(Date.now() / 1000),
+    action_source: 'website',
+    user_data: userData,
+  };
+  if (eventId) event.event_id = eventId;
+  if (eventSourceUrl) event.event_source_url = eventSourceUrl;
+  return { data: [event] };
+}
+
+// Fires the server-side Lead to Meta. Returns Meta's response so the caller can
+// log events_received (the only real proof it landed — see CAPI verification
+// principle). Throws on misconfig or non-2xx so deliverOptin can swallow it
+// (CAPI is best-effort; a Meta outage must never block signup).
+async function fireCapiLead(email, ctx = {}) {
+  const pixelId = process.env.STACK_META_PIXEL_ID;
+  const token = process.env.STACK_META_CAPI_ACCESS_TOKEN;
+  if (!pixelId || !token) throw new Error('CAPI not configured');
+  const payload = buildCapiPayload(email, ctx);
+  if (process.env.STACK_META_TEST_EVENT_CODE) {
+    payload.test_event_code = process.env.STACK_META_TEST_EVENT_CODE;
+  }
+  const r = await fetch(`https://graph.facebook.com/v22.0/${pixelId}/events?access_token=${encodeURIComponent(token)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(`Meta CAPI ${r.status}: ${JSON.stringify(data)}`);
+  return data; // { events_received, messages, fbtrace_id }
+}
+
 // Kit delivers the pack (via the stack-pack automation), so addToKit is the
-// critical path. notifyMatt is best-effort and never blocks the response.
-//
-// TODO(CAPI): once the server-side Meta Conversions API bridge is set up, fire
-// a server-side "Lead" event here (after a successful addToKit) for pixel
-// 318856247215986, with the hashed email + an event_id that matches the
-// client-side fbq('track','Lead', {eventID}) call so the two dedupe. This is
-// what makes the leads trackable/optimizable in Meta beyond the browser pixel.
-// See Agency CAPI Pattern in vault memory for the reusable convention.
-async function deliverOptin(email, deps) {
-  const { addToKit, notifyMatt } = deps;
+// critical path. The CAPI Lead and the Matt notification are both best-effort
+// and never block the response. The server-side Lead fires only after a
+// successful Kit add, so we never report a lead Meta-side that didn't subscribe.
+async function deliverOptin(email, deps, ctx = {}) {
+  const { addToKit, notifyMatt, fireCapiLead } = deps;
   try {
     await addToKit(email);
   } catch (e) {
     console.error('Kit add FAILED (no pack sent):', e);
     return { ok: false };
+  }
+  if (fireCapiLead) {
+    try {
+      const meta = await fireCapiLead(email, ctx);
+      console.log('CAPI Lead events_received:', meta && meta.events_received, 'fbtrace:', meta && meta.fbtrace_id);
+    } catch (e) {
+      console.error('CAPI Lead error (non-blocking):', e);
+    }
   }
   try {
     await notifyMatt(email);
@@ -113,7 +163,20 @@ module.exports = async function handler(req, res) {
   const v = validateOptin(body);
   if (!v.ok) return res.status(422).json({ error: v.error });
 
-  const result = await deliverOptin(v.email, { addToKit, notifyMatt });
+  // Context for the server-side Meta Lead. event_id comes from the browser so
+  // it dedupes against the client fbq('track','Lead',{eventID}); fbp/fbc are
+  // the Meta cookies the browser forwards for better match quality.
+  const fwd = req.headers['x-forwarded-for'];
+  const ctx = {
+    eventId: body.event_id,
+    eventSourceUrl: body.event_source_url || req.headers['referer'],
+    clientIp: (fwd ? String(fwd).split(',')[0].trim() : '') || req.socket?.remoteAddress,
+    userAgent: req.headers['user-agent'],
+    fbp: body.fbp,
+    fbc: body.fbc,
+  };
+
+  const result = await deliverOptin(v.email, { addToKit, notifyMatt, fireCapiLead }, ctx);
   if (!result.ok) return res.status(502).json({ error: 'Could not sign you up. Please try again.' });
   return res.status(200).json({ ok: true });
 };
@@ -121,3 +184,5 @@ module.exports = async function handler(req, res) {
 module.exports.validateOptin = validateOptin;
 module.exports.deliverOptin = deliverOptin;
 module.exports.throwIfResendError = throwIfResendError;
+module.exports.buildCapiPayload = buildCapiPayload;
+module.exports.sha256 = sha256;
