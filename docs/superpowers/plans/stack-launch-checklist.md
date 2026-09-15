@@ -13,12 +13,15 @@ Page is LIVE on production (hmficmarketing.com/stack). Status of gates:
 - [ ] **Human happy-path test:** submit a real email on the live page, confirm Email 1 arrives with a working PDF download, and the subscriber is tagged `stack-pack`.
 - [ ] **Then** link `/stack` from bio / announce.
 
-## TODO: CAPI tracking for /stack leads
-Right now the only Meta signal is the **client-side** pixel `fbq('track','Lead')` (browser-only, lossy: ad blockers, iOS, etc). To track and optimize these leads properly, add a **server-side Meta Conversions API (CAPI) Lead event** from the endpoint.
-- Fire it in `api/stack-optin.js` after a successful `addToKit` (a `TODO(CAPI)` marker is already in the code at `deliverOptin`).
-- Send `Lead` for pixel `318856247215986` with the subscriber's **hashed email** (sha256), client IP + user agent, and an **`event_id`** that matches a client-side `fbq('track','Lead',{eventID})` so the browser + server events **dedupe**.
-- Reuse the **Agency CAPI Pattern** convention (env-prefixed token, one function/handler, audit log). See vault memory `reference_agency_capi_pattern.md` and `feedback_capi_verification_principle.md` (verify via events_received + event name, not just "success").
-- Needs: a Meta CAPI access token for the pixel's dataset (`927123400783570` is the older pixel; we're using `318856247215986`), stored as a Vercel env var.
+## CAPI tracking for /stack leads — CODE SHIPPED (PR #2, 2026-06-15)
+Server-side Meta Conversions API **Lead** now fires from `api/stack-optin.js` (`fireCapiLead`, called from `deliverOptin` after a successful `addToKit`). Browser + server share one `event_id` (generated client-side, sent in the POST body + used in `fbq('track','Lead',{eventID})`) so Meta dedupes them. Email hashed SHA-256; `_fbp`/`_fbc` + page URL + client IP/UA forwarded for match quality. Best-effort: never blocks signup, no-ops until env vars set.
+
+**LIVE + VERIFIED 2026-06-18.** Pixel confirmed `318856247215986` = "HMFIC Marketing's Pixel" (business HMFIC Marketing) via `meta ads dataset get`. Env vars `STACK_META_PIXEL_ID` + `STACK_META_CAPI_ACCESS_TOKEN` set in Vercel Production (token piped from clipboard via `pbpaste | vercel env add`, never in chat/repo). Redeployed to hmficmarketing.com. Real opt-in test fired `POST /api/stack-optin 200` with runtime log `CAPI Lead events_received: 1` — server-side Lead confirmed received by Meta.
+- [x] Meta CAPI token generated from HMFIC Marketing's Pixel.
+- [x] Vercel Production env vars set + redeployed.
+- [x] Verified `events_received: 1` in Vercel runtime logs.
+
+Convention note: client-namespaced env vars (`STACK_META_*`) per `reference_agency_capi_pattern.md`. No Supabase proxy here — we own the Vercel endpoint, so the Lead fires inline (simpler than the off-platform proxy pattern those clients needed).
 
 ## Deferred to v2
 - Social-proof line ("X operators downloaded this") once real download numbers exist.
