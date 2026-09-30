@@ -113,7 +113,7 @@ async function sendAutoReply(body) {
   return resend.emails.send({
     from: 'Matt Holmes <matt@hmficmarketing.com>',
     to: body.email,
-    subject: `${firstName}, we got your application`,
+    subject: `${firstName}, I got your application`,
     html: buildAutoReplyHtml(firstName),
   });
 }
@@ -196,8 +196,8 @@ function buildAutoReplyHtml(firstName) {
         <tr>
           <td style="padding:40px;">
             <h1 style="margin:0 0 16px;font-size:22px;color:#0a0a0a;">Hey ${firstName},</h1>
-            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#333;">We received your application and we're on it. If your business is a good fit for what we do, you'll hear back from me personally within 24 to 48 hours.</p>
-            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#333;">In the meantime, no need to do anything. We'll review your info and come prepared with ideas if we move forward.</p>
+            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#333;">I got your application and I'm on it. If your business is a good fit for what I do, you'll hear back from me within 24 to 48 hours.</p>
+            <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#333;">In the meantime, no need to do anything. I'll review your info and come prepared with ideas if we move forward.</p>
             <p style="margin:0;font-size:16px;line-height:1.6;color:#333;">Talk soon,<br><strong>Matt Holmes</strong><br><span style="color:#888;font-size:14px;">HMFIC Marketing</span></p>
           </td>
         </tr>
