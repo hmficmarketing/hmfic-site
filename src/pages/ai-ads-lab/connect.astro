@@ -1,0 +1,425 @@
+---
+// Member connect flow for AI Ads Lab (Meta app 1734157037643798).
+// Facebook Login for Business (config "Member connect"), then the member picks
+// ONE ad account + Page. Client-side only for now: the token stays in memory
+// and nothing is saved. Screen 2 is skipped when only one account + Page come back.
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="canonical" href="https://hmficmarketing.com/ai-ads-lab/connect" />
+  <title>Connect your ad account | AI Ads Lab</title>
+  <meta name="description" content="Connect your Facebook ad account to AI Ads Lab." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f5f0e6;
+      --paper-lift: #fffdf7;
+      --edge: #e0d8c4;
+      --ink: #1a1a1a;
+      --ink-3: #4a4238;
+      --ink-4: #6b6055;
+      --accent: #b83a0e;
+      --ok: #2f7a3e;
+      --no: #a3320b;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--paper); color: var(--ink); }
+    body { font-family: 'DM Sans', system-ui, sans-serif; }
+    main {
+      max-width: 440px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 40px 24px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    section { display: flex; flex-direction: column; gap: 22px; flex-grow: 1; }
+    section[hidden] { display: none; }
+    .top { display: flex; justify-content: space-between; align-items: center; }
+    .mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-4);
+    }
+    .brand { color: var(--ink); font-weight: 500; }
+    .steps { display: flex; gap: 6px; }
+    .steps span { flex-grow: 1; height: 4px; border-radius: 2px; background: var(--edge); }
+    .steps span.on { background: var(--accent); }
+    h1 {
+      margin: 0;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 44px;
+      line-height: 0.98;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+    .lede { margin: 12px 0 0; font-size: 17px; line-height: 1.5; color: var(--ink-3); }
+    .card {
+      background: var(--paper-lift);
+      border: 1px solid var(--edge);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .card hr { border: 0; height: 1px; background: var(--edge); margin: 0; }
+    .rule { display: flex; flex-direction: column; gap: 8px; }
+    .item { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 1.4; }
+    .item svg { flex-shrink: 0; margin-top: 1px; }
+    .spacer { flex-grow: 1; }
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: 56px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      font: 600 17px 'DM Sans', system-ui, sans-serif;
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.55; cursor: default; }
+    .btn.dark { background: var(--ink); }
+    .note { margin: 0; text-align: center; font-size: 13px; line-height: 1.5; color: var(--ink-4); }
+    .links { display: flex; justify-content: center; gap: 18px; font-size: 13px; margin-top: 18px; }
+    a { color: var(--ink); }
+    a:hover { color: var(--ink-3); }
+    .linkbtn {
+      background: none; border: 0; padding: 0; cursor: pointer;
+      font: inherit; color: var(--ink); text-decoration: underline;
+    }
+    .back { text-decoration: none; color: var(--ink); font-weight: 500; }
+    fieldset { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 8px; }
+    legend { padding: 0; margin-bottom: 8px; }
+    .opt {
+      display: flex; gap: 12px; align-items: center;
+      background: var(--paper-lift);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      padding: 15px;
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .opt:has(input:checked) { border: 2px solid var(--accent); padding: 14px; }
+    .opt input { accent-color: var(--accent); width: 20px; height: 20px; margin: 0; flex-shrink: 0; }
+    .opt-text { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0; }
+    .opt-name { font-weight: 600; font-size: 16px; overflow-wrap: anywhere; }
+    .opt-meta { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink-4); }
+    .filter {
+      width: 100%; min-height: 44px; padding: 10px 14px;
+      border: 1px solid var(--edge); border-radius: 10px;
+      background: var(--paper-lift); font: 15px 'DM Sans', system-ui, sans-serif; color: var(--ink);
+    }
+    .list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+    .check {
+      width: 52px; height: 52px; border-radius: 26px; background: var(--ok);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .summary { padding: 4px 16px; gap: 0; }
+    .row {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 13px 0; border-bottom: 1px solid var(--edge);
+    }
+    .row:last-child { border-bottom: 0; }
+    .row .val { font-weight: 600; font-size: 15px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; overflow-wrap: anywhere; }
+    .warn { color: var(--no); }
+    .error {
+      background: #fbe9e2; border: 1px solid #e8b9a6; color: #7a2508;
+      border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.45;
+    }
+    .error[hidden] { display: none; }
+    .loading { align-items: center; justify-content: center; text-align: center; }
+    .spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 4px solid var(--edge); border-top-color: var(--accent);
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- 1 · Connect -->
+    <section id="s-connect">
+      <div class="top">
+        <span class="mono brand">AI Ads Lab</span>
+        <span class="mono">Step 1 of 3</span>
+      </div>
+      <div class="steps" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+      <div>
+        <h1>Connect your Facebook ad account</h1>
+        <p class="lede">We build your ads inside your own ad account. Nothing goes live or spends a dollar until you approve it.</p>
+      </div>
+      <div class="card">
+        <div class="rule">
+          <span class="mono">What we can do</span>
+          <div class="item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f7a3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>See campaigns and results in the one ad account you pick</span></div>
+          <div class="item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2f7a3e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Build new campaigns there, paused, for your OK</span></div>
+        </div>
+        <hr />
+        <div class="rule">
+          <span class="mono">What we never do</span>
+          <div class="item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3320b" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Touch your other ad accounts, profile or messages</span></div>
+          <div class="item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a3320b" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><span>Spend money without your approval</span></div>
+        </div>
+      </div>
+      <p class="error" id="connect-error" role="alert" hidden></p>
+      <div class="spacer"></div>
+      <div class="rule" style="gap: 12px">
+        <button class="btn" id="btn-connect" type="button" disabled>Loading…</button>
+        <p class="note">Facebook will ask which Page and ad account to share. You can pick just one.</p>
+      </div>
+      <nav class="links" aria-label="Policies">
+        <a href="/ai-ads-lab/privacy">Privacy</a>
+        <a href="/ai-ads-lab/terms">Terms</a>
+        <a href="/ai-ads-lab/data-deletion">Data deletion</a>
+      </nav>
+    </section>
+
+    <!-- Loading -->
+    <section id="s-loading" class="loading" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="lede" id="loading-text" role="status">Getting your ad accounts…</p>
+    </section>
+
+    <!-- 2 · Pick -->
+    <section id="s-pick" hidden>
+      <div class="top">
+        <button class="linkbtn mono back" id="btn-back" type="button">← Back</button>
+        <span class="mono">Step 2 of 3</span>
+      </div>
+      <div class="steps" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span></div>
+      <div>
+        <h1 style="font-size: 40px">Pick the ad account we'll work in</h1>
+        <p class="lede">We only ever touch the one you choose.</p>
+      </div>
+      <fieldset>
+        <legend class="mono">Ad account</legend>
+        <input class="filter" id="acct-filter" type="search" placeholder="Search ad accounts" aria-label="Search ad accounts" hidden />
+        <div class="list" id="acct-list"></div>
+      </fieldset>
+      <fieldset id="page-set">
+        <legend class="mono">Facebook Page your ads run from</legend>
+        <div class="list" id="page-list"></div>
+      </fieldset>
+      <p class="error" id="pick-error" role="alert" hidden></p>
+      <div class="spacer"></div>
+      <div class="rule" style="gap: 12px">
+        <button class="btn" id="btn-pick" type="button">Connect this account</button>
+        <p class="note">You can switch accounts later.</p>
+      </div>
+    </section>
+
+    <!-- 3 · Connected -->
+    <section id="s-connected" hidden>
+      <div class="top">
+        <span class="mono brand">AI Ads Lab</span>
+        <span class="mono">Step 3 of 3</span>
+      </div>
+      <div class="steps" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+      <div>
+        <div class="check" style="margin-bottom: 12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg></div>
+        <h1 style="font-size: 48px">You're connected</h1>
+        <p class="lede">Here's what AI Ads Lab can work with.</p>
+      </div>
+      <div class="card summary">
+        <div class="row"><span class="mono">Facebook</span><span class="val" id="v-name"></span></div>
+        <div class="row"><span class="mono">Business</span><span class="val" id="v-biz"></span></div>
+        <div class="row"><span class="mono">Ad account</span><span class="val"><span id="v-acct"></span><span class="opt-meta" id="v-acct-meta"></span></span></div>
+        <div class="row"><span class="mono">Page</span><span class="val" id="v-page"></span></div>
+        <div class="row"><span class="mono">Pixel</span><span class="val" id="v-pixel"></span></div>
+      </div>
+      <div class="rule">
+        <span class="mono">What happens next</span>
+        <p style="margin: 0; font-size: 15px; line-height: 1.5">Your first ad pack lands Monday. You approve it here before anything goes live.</p>
+      </div>
+      <div class="spacer"></div>
+      <div class="rule" style="gap: 12px">
+        <button class="btn dark" id="btn-done" type="button">Done</button>
+        <p class="note">Facebook asks you to reconnect about every 60 days. We'll remind you. <button class="linkbtn" id="btn-change" type="button">Change account</button></p>
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var APP_ID = '1734157037643798';
+      var CONFIG_ID = '29149973614628223';
+      var VERSION = 'v26.0';
+      var STATUS = { 1: 'Active', 2: 'Disabled', 3: 'Unsettled', 7: 'Pending review', 8: 'Pending settlement', 9: 'Grace period', 100: 'Pending closure', 101: 'Closed' };
+
+      var state = { me: null, accounts: [], pages: [] };
+      var $ = function (id) { return document.getElementById(id); };
+
+      function show(id) {
+        ['s-connect', 's-loading', 's-pick', 's-connected'].forEach(function (s) { $(s).hidden = s !== id; });
+        window.scrollTo(0, 0);
+      }
+      function setError(id, msg) { var el = $(id); el.textContent = msg || ''; el.hidden = !msg; }
+      function loading(text) { $('loading-text').textContent = text; show('s-loading'); }
+
+      function api(path, params) {
+        return new Promise(function (resolve, reject) {
+          FB.api(path, 'GET', params || {}, function (r) {
+            if (r && !r.error) resolve(r); else reject((r && r.error) || { message: 'No response from Facebook.' });
+          });
+        });
+      }
+
+      function el(tag, cls, text) {
+        var n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text != null) n.textContent = text;
+        return n;
+      }
+
+      function option(group, value, name, meta, checked) {
+        var label = el('label', 'opt');
+        var input = el('input');
+        input.type = 'radio'; input.name = group; input.value = value; input.checked = checked;
+        var text = el('span', 'opt-text');
+        text.appendChild(el('span', 'opt-name', name));
+        if (meta) text.appendChild(el('span', 'opt-meta', meta));
+        label.appendChild(input); label.appendChild(text);
+        return label;
+      }
+
+      function acctMeta(a) {
+        return 'act_' + a.account_id + ' · ' + (STATUS[a.account_status] || 'Status ' + a.account_status) + (a.currency ? ' · ' + a.currency : '');
+      }
+
+      function renderAccounts(filter) {
+        var list = $('acct-list');
+        var picked = (document.querySelector('input[name=acct]:checked') || {}).value;
+        list.textContent = '';
+        var q = (filter || '').toLowerCase();
+        state.accounts
+          .filter(function (a) { return !q || (a.name || '').toLowerCase().indexOf(q) > -1 || a.account_id.indexOf(q) > -1; })
+          .forEach(function (a, i) {
+            list.appendChild(option('acct', a.account_id, a.name || 'Unnamed ad account', acctMeta(a), picked ? picked === a.account_id : i === 0));
+          });
+      }
+
+      function renderPages() {
+        var list = $('page-list');
+        list.textContent = '';
+        state.pages.forEach(function (p, i) {
+          var ig = p.instagram_business_account && p.instagram_business_account.username;
+          list.appendChild(option('page', p.id, p.name, ig ? 'Instagram: @' + ig : null, i === 0));
+        });
+        $('page-set').hidden = state.pages.length === 0;
+      }
+
+      function loadAssets() {
+        loading('Getting your ad accounts…');
+        Promise.all([
+          api('/me', { fields: 'name' }),
+          api('/me/adaccounts', { fields: 'name,account_id,account_status,currency,business{name}', limit: 200 }),
+          api('/me/accounts', { fields: 'name,instagram_business_account{username}', limit: 100 })
+        ]).then(function (r) {
+          state.me = r[0];
+          state.accounts = r[1].data || [];
+          state.pages = r[2].data || [];
+          if (!state.accounts.length) {
+            show('s-connect');
+            setError('connect-error', "We didn't get an ad account from Facebook. Tap Continue again and tick at least one ad account in the Facebook window.");
+            return;
+          }
+          if (state.accounts.length === 1 && state.pages.length <= 1) {
+            finish(state.accounts[0], state.pages[0] || null);
+            return;
+          }
+          $('acct-filter').hidden = state.accounts.length <= 6;
+          $('acct-filter').value = '';
+          renderAccounts('');
+          renderPages();
+          setError('pick-error', '');
+          show('s-pick');
+        }).catch(function (e) {
+          show('s-connect');
+          setError('connect-error', 'Facebook said: ' + e.message);
+        });
+      }
+
+      function finish(acct, page) {
+        loading('Checking your ad account…');
+        api('/act_' + acct.account_id + '/adspixels', { fields: 'name', limit: 25 })
+          .then(function (r) { return r.data || []; })
+          .catch(function () { return null; })
+          .then(function (pixels) {
+            $('v-name').textContent = state.me.name;
+            $('v-biz').textContent = acct.business ? acct.business.name : 'Personal ad account';
+            $('v-acct').textContent = acct.name || 'Unnamed ad account';
+            $('v-acct-meta').textContent = 'act_' + acct.account_id + ' · ' + (STATUS[acct.account_status] || 'Status ' + acct.account_status);
+            $('v-page').textContent = page ? page.name : 'None shared';
+            var px = $('v-pixel');
+            px.className = 'val';
+            if (pixels && pixels.length) {
+              px.textContent = pixels[0].name + (pixels.length > 1 ? ' +' + (pixels.length - 1) + ' more' : '');
+            } else {
+              px.textContent = pixels ? 'None found' : "Couldn't check";
+              px.className = 'val warn';
+            }
+            show('s-connected');
+          });
+      }
+
+      $('btn-connect').addEventListener('click', function () {
+        setError('connect-error', '');
+        FB.login(function (res) {
+          if (res && res.authResponse) loadAssets();
+          else setError('connect-error', 'Facebook login was cancelled. Tap Continue with Facebook to try again.');
+        }, { config_id: CONFIG_ID });
+      });
+
+      $('btn-pick').addEventListener('click', function () {
+        var a = document.querySelector('input[name=acct]:checked');
+        if (!a) { setError('pick-error', 'Pick an ad account first.'); return; }
+        var p = document.querySelector('input[name=page]:checked');
+        var acct = state.accounts.filter(function (x) { return x.account_id === a.value; })[0];
+        var page = p ? state.pages.filter(function (x) { return x.id === p.value; })[0] : null;
+        finish(acct, page);
+      });
+
+      $('acct-filter').addEventListener('input', function (e) { renderAccounts(e.target.value); });
+      $('btn-back').addEventListener('click', function () { show('s-connect'); });
+      $('btn-change').addEventListener('click', function () {
+        if (state.accounts.length > 1 || state.pages.length > 1) { renderAccounts(''); renderPages(); show('s-pick'); }
+        else show('s-connect');
+      });
+      $('btn-done').addEventListener('click', function () {
+        $('btn-done').textContent = "All set. You can close this page.";
+        $('btn-done').disabled = true;
+      });
+
+      window.fbAsyncInit = function () {
+        FB.init({ appId: APP_ID, cookie: false, xfbml: false, version: VERSION });
+        var b = $('btn-connect');
+        b.disabled = false;
+        b.textContent = 'Continue with Facebook';
+      };
+      var s = document.createElement('script');
+      s.async = true; s.defer = true; s.crossOrigin = 'anonymous';
+      s.src = 'https://connect.facebook.net/en_US/sdk.js';
+      s.onerror = function () {
+        $('btn-connect').textContent = 'Facebook could not load';
+        setError('connect-error', "Facebook's login didn't load. Turn off any ad or tracking blocker for this page, then refresh.");
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
