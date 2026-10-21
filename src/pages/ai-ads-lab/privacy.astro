@@ -1,0 +1,103 @@
+---
+// Privacy policy for AI Ads Lab (Meta app 1734157037643798).
+import PolicyLayout from '../../layouts/PolicyLayout.astro';
+---
+<PolicyLayout
+  title="AI Ads Lab Privacy Policy"
+  description="How AI Ads Lab, operated by HMFIC Marketing LLC, accesses, uses, stores, and deletes data from members' Meta ad accounts."
+  path="/ai-ads-lab/privacy"
+  updated="October 21, 2026"
+>
+  <h2>About AI Ads Lab</h2>
+  <p>
+    AI Ads Lab (the "Service") is operated by HMFIC Marketing LLC ("we", "us",
+    "our"). It helps business owners and creators ("members") plan, build,
+    launch, and report on advertising campaigns in their own Meta ad account.
+    The Service connects to Meta through Meta's official Marketing API, using
+    Facebook Login for Business.
+  </p>
+
+  <h2>What data we access</h2>
+  <p>When a member connects their Meta account, the Service may access:</p>
+  <ul>
+    <li>Basic profile information Meta returns at login (name and Facebook user ID).</li>
+    <li>The list of ad accounts, Pages, and business portfolios the member chooses to share with the Service during login.</li>
+    <li>For the <strong>one ad account the member selects</strong>: campaigns, ad sets, ads, creatives, audiences, pixel and conversion settings, and performance results (such as spend, impressions, clicks, leads, and purchases).</li>
+  </ul>
+  <p>
+    The Service works only inside the single ad account the member selects in
+    our portal. It does not read or change any other ad account the member's
+    login can reach. It does not access the member's password, private messages,
+    personal Facebook posts, friends list, or payment methods on file with Meta.
+  </p>
+  <p>
+    We also store what members give us directly: their name, email address,
+    answers to our onboarding questions (business, offer, audience, and brand
+    voice), and any images or videos they upload for their ads. Subscription
+    payments are processed by Stripe; we never see or store full card numbers.
+  </p>
+
+  <h2>How we use the data</h2>
+  <ul>
+    <li>To write ad plans, ad copy, scripts, and images for the member's business.</li>
+    <li>To build campaigns in the member's ad account. Campaigns are created paused, and nothing goes live or spends money until the member approves it.</li>
+    <li>To pull performance results and prepare the member's reports and recommendations.</li>
+    <li>To provide support and run the member's account with us.</li>
+  </ul>
+  <p>
+    We do not use a member's ad account data to advertise to that member, to
+    build audiences for anyone else, or to train AI models. We do not sell
+    member data.
+  </p>
+
+  <h2>Data storage and security</h2>
+  <p>
+    Data is stored in a private database operated on our behalf by our hosting
+    providers. Meta access tokens are encrypted at rest. Access is limited to
+    the member and to the HMFIC Marketing LLC personnel operating the Service.
+    Meta access tokens expire after about 60 days unless the member reconnects.
+  </p>
+
+  <h2>Who we share data with</h2>
+  <p>
+    We do not sell, rent, or trade member data. We share it only with the
+    service providers that run the Service for us, under confidentiality
+    obligations:
+  </p>
+  <ul>
+    <li>Anthropic (Claude API), to generate ad plans, copy, and analysis.</li>
+    <li>Supabase and Vercel, to host the database and member portal.</li>
+    <li>Stripe, to process subscription payments.</li>
+  </ul>
+  <p>
+    We may also disclose data if the law requires it, or to protect the rights,
+    safety, or property of our members, ourselves, or others.
+  </p>
+
+  <h2>Retention</h2>
+  <p>
+    We keep member data while the member's account is active. When a member
+    cancels or asks us to delete their data, we delete it within 30 days, except
+    for records we must keep by law (such as billing records).
+  </p>
+
+  <h2>Your choices and deletion</h2>
+  <ul>
+    <li>You can disconnect AI Ads Lab at any time from <a href="https://www.facebook.com/settings/?tab=business_tools">Facebook Settings → Business Integrations</a>. This immediately stops our access to your Meta account.</li>
+    <li>You can ask us to delete all of your data. See our <a href="/ai-ads-lab/data-deletion">Data Deletion</a> page for the steps.</li>
+    <li>You can ask for a copy of the data we hold about you, or ask us to correct it, by emailing us.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>
+    The Service is for businesses and is not directed to anyone under 18. We do
+    not knowingly collect data from anyone under 18.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    We may update this policy. We will tell members about material changes
+    before they take effect. The date at the top of this page shows the latest
+    version.
+  </p>
+</PolicyLayout>
