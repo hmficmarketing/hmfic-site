@@ -261,7 +261,9 @@
       var VERSION = 'v26.0';
       var STATUS = { 1: 'Active', 2: 'Disabled', 3: 'Unsettled', 7: 'Pending review', 8: 'Pending settlement', 9: 'Grace period', 100: 'Pending closure', 101: 'Closed' };
 
-      var state = { me: null, accounts: [], pages: [] };
+      var HIDDEN_STATUS = { 2: true, 100: true, 101: true };
+
+      var state = { me: null, accounts: [], pages: [], myPages: [], bizPages: {} };
       var $ = function (id) { return document.getElementById(id); };
 
       function show(id) {
@@ -298,7 +300,38 @@
       }
 
       function acctMeta(a) {
-        return 'act_' + a.account_id + ' · ' + (STATUS[a.account_status] || 'Status ' + a.account_status) + (a.currency ? ' · ' + a.currency : '');
+        return (a.business ? a.business.name + ' · ' : '') + 'act_' + a.account_id + ' · ' + (STATUS[a.account_status] || 'Status ' + a.account_status) + (a.currency ? ' · ' + a.currency : '');
+      }
+
+      // Pages owned by a business don't come back from /me/accounts, so we also
+      // pull the picked ad account's business Pages. Client Pages only load when
+      // the business owns none, so agency users don't see every client's Page.
+      function pagesFor(acct) {
+        var personal = state.myPages;
+        var bizId = acct && acct.business && acct.business.id;
+        if (!bizId) return Promise.resolve(personal);
+        var cached = state.bizPages[bizId];
+        var list = function (edge) {
+          return api('/' + bizId + '/' + edge, { fields: 'name', limit: 100 }).then(function (r) { return r.data || []; }).catch(function () { return []; });
+        };
+        var load = cached ? Promise.resolve(cached) : list('owned_pages')
+          .then(function (owned) { return owned.length ? owned : list('client_pages'); })
+          .then(function (pages) { state.bizPages[bizId] = pages; return pages; });
+        return load.then(function (biz) {
+          var seen = {}, out = [];
+          biz.concat(personal).forEach(function (p) { if (!seen[p.id]) { seen[p.id] = true; out.push(p); } });
+          return out;
+        });
+      }
+
+      function pickedAccount() {
+        var a = document.querySelector('input[name=acct]:checked');
+        return a ? state.accounts.filter(function (x) { return x.account_id === a.value; })[0] : null;
+      }
+
+      function refreshPages() {
+        var acct = pickedAccount();
+        return pagesFor(acct).then(function (pages) { state.pages = pages; renderPages(); });
       }
 
       function renderAccounts(filter) {
@@ -327,27 +360,34 @@
         loading('Getting your ad accounts…');
         Promise.all([
           api('/me', { fields: 'name' }),
-          api('/me/adaccounts', { fields: 'name,account_id,account_status,currency,business{name}', limit: 200 }),
+          api('/me/adaccounts', { fields: 'name,account_id,account_status,currency,business{id,name}', limit: 200 }),
           api('/me/accounts', { fields: 'name,instagram_business_account{username}', limit: 100 })
         ]).then(function (r) {
           state.me = r[0];
-          state.accounts = r[1].data || [];
-          state.pages = r[2].data || [];
+          // Hide disabled and closed accounts; active ones first, then by name.
+          state.accounts = (r[1].data || [])
+            .filter(function (a) { return !HIDDEN_STATUS[a.account_status]; })
+            .sort(function (x, y) {
+              var ax = x.account_status === 1 ? 0 : 1, ay = y.account_status === 1 ? 0 : 1;
+              return ax - ay || (x.name || '').localeCompare(y.name || '');
+            });
+          state.myPages = r[2].data || [];
           if (!state.accounts.length) {
             show('s-connect');
-            setError('connect-error', "We didn't get an ad account from Facebook. Tap Continue again and tick at least one ad account in the Facebook window.");
-            return;
-          }
-          if (state.accounts.length === 1 && state.pages.length <= 1) {
-            finish(state.accounts[0], state.pages[0] || null);
+            setError('connect-error', "We didn't get an open ad account from Facebook. Tap Continue again and tick at least one active ad account in the Facebook window.");
             return;
           }
           $('acct-filter').hidden = state.accounts.length <= 6;
           $('acct-filter').value = '';
           renderAccounts('');
-          renderPages();
-          setError('pick-error', '');
-          show('s-pick');
+          return refreshPages().then(function () {
+            if (state.accounts.length === 1 && state.pages.length <= 1) {
+              finish(state.accounts[0], state.pages[0] || null);
+              return;
+            }
+            setError('pick-error', '');
+            show('s-pick');
+          });
         }).catch(function (e) {
           show('s-connect');
           setError('connect-error', 'Facebook said: ' + e.message);
@@ -395,6 +435,8 @@
       });
 
       $('acct-filter').addEventListener('input', function (e) { renderAccounts(e.target.value); });
+      // Each ad account's business has its own Pages, so reload them on change.
+      $('acct-list').addEventListener('change', function () { refreshPages(); });
       $('btn-back').addEventListener('click', function () { show('s-connect'); });
       $('btn-change').addEventListener('click', function () {
         if (state.accounts.length > 1 || state.pages.length > 1) { renderAccounts(''); renderPages(); show('s-pick'); }
