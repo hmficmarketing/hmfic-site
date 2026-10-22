@@ -331,7 +331,12 @@
 
       function refreshPages() {
         var acct = pickedAccount();
-        return pagesFor(acct).then(function (pages) { state.pages = pages; renderPages(); });
+        return pagesFor(acct).then(function (pages) {
+          if (pickedAccount() !== acct) return; // a newer pick is loading
+          state.pages = pages;
+          state.pagesAcct = acct ? acct.account_id : null;
+          renderPages();
+        });
       }
 
       function renderAccounts(filter) {
@@ -428,13 +433,19 @@
       $('btn-pick').addEventListener('click', function () {
         var a = document.querySelector('input[name=acct]:checked');
         if (!a) { setError('pick-error', 'Pick an ad account first.'); return; }
-        var p = document.querySelector('input[name=page]:checked');
         var acct = state.accounts.filter(function (x) { return x.account_id === a.value; })[0];
-        var page = p ? state.pages.filter(function (x) { return x.id === p.value; })[0] : null;
-        finish(acct, page);
+        var go = function () {
+          var p = document.querySelector('input[name=page]:checked');
+          var page = p ? state.pages.filter(function (x) { return x.id === p.value; })[0] : null;
+          finish(acct, page);
+        };
+        // Pages still loading for this account: wait, then use the first one.
+        if (state.pagesAcct !== acct.account_id) refreshPages().then(go); else go();
       });
 
-      $('acct-filter').addEventListener('input', function (e) { renderAccounts(e.target.value); });
+      // Filtering re-renders the list and can auto-select a new account without
+      // a change event, so reload Pages here too.
+      $('acct-filter').addEventListener('input', function (e) { renderAccounts(e.target.value); refreshPages(); });
       // Each ad account's business has its own Pages, so reload them on change.
       $('acct-list').addEventListener('change', function () { refreshPages(); });
       $('btn-back').addEventListener('click', function () { show('s-connect'); });
